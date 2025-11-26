@@ -11,7 +11,7 @@
         const cardContainers = document.querySelectorAll('[uk-grid] > div');
 
         if (!searchInput || !cardContainers.length) {
-            console.log('Filter elements not found');
+            // Elements not found - likely not on the browse page
             return;
         }
 
@@ -31,7 +31,7 @@
                 const cardTitle = card.querySelector('.uk-card-title');
                 const cardBadge = card.querySelector('.uk-badge');
                 const cardCategory = card.querySelector('.uk-text-small.uk-text-uppercase');
-                
+
                 const titleText = cardTitle ? cardTitle.textContent.toLowerCase() : '';
                 const categoryText = cardCategory ? cardCategory.textContent.toLowerCase() : '';
                 const badgeText = cardBadge ? cardBadge.textContent.toLowerCase().trim() : '';
@@ -39,8 +39,8 @@
                 // Search Match Logic - search in title and category
                 let matchesSearch = true;
                 if (searchTerm) {
-                    matchesSearch = titleText.includes(searchTerm) || 
-                                   categoryText.includes(searchTerm);
+                    matchesSearch = titleText.includes(searchTerm) ||
+                        categoryText.includes(searchTerm);
                 }
 
                 // Status Filter

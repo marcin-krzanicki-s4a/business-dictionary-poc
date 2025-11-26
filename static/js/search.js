@@ -1,20 +1,28 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const searchInput = document.getElementById('search-input');
     const searchResults = document.getElementById('search-results');
     const resultsList = document.getElementById('results-list');
-    
+
     if (!searchInput) return;
-    
+
     let searchIndex = [];
-    
+
     // Load search index
     try {
-        const response = await fetch('/index.json');
+        const baseUrl = window.baseURL || '/';
+        // Ensure baseUrl ends with / and remove it from index.json path if present
+        const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+        const response = await fetch(cleanBaseUrl + 'index.json');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         searchIndex = await response.json();
     } catch (error) {
         console.error('Error loading search index:', error);
     }
-    
+
     // Get icon and color for category
     function getCategoryIcon(category) {
         const icons = {
@@ -25,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         };
         return icons[category] || 'file-text';
     }
-    
+
     // Search function
     function performSearch(query) {
         if (!query.trim()) {
@@ -33,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             resultsList.innerHTML = '';
             return;
         }
-        
+
         const lowercaseQuery = query.toLowerCase();
         const results = searchIndex.filter(item => {
             const searchableContent = [
@@ -43,16 +51,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 item.content,
                 item.status
             ].join(' ').toLowerCase();
-            
+
             return searchableContent.includes(lowercaseQuery);
         }).slice(0, 10); // Limit to 10 results
-        
+
         if (results.length === 0) {
             resultsList.innerHTML = '<li class="uk-text-center uk-text-muted">No results found</li>';
             searchResults.style.display = 'block';
             return;
         }
-        
+
         resultsList.innerHTML = results.map(item => `
             <li style="text-align: left;">
                 <div style="margin-bottom: 4px;">
@@ -68,10 +76,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <a href="${item.permalink}" class="uk-button uk-button-text uk-button-small uk-margin-small-top" style="padding-left: 0;">View Details →</a>
             </li>
         `).join('');
-        
+
         searchResults.style.display = 'block';
     }
-    
+
     // Helper function to escape HTML
     function escapeHtml(text) {
         const map = {
@@ -83,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         };
         return text.replace(/[&<>"']/g, m => map[m]);
     }
-    
+
     // Event listener for search input
     let searchTimeout;
     searchInput.addEventListener('input', (e) => {
