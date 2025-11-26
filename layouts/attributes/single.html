@@ -211,24 +211,35 @@
 
                 <!-- Scan Objects -->
                 {{ range $objID, $objData := site.Data.objects }}
+                {{ $found := false }}
                 {{ if $objData.CoreAttributes }}
                 {{ range $objData.CoreAttributes }}
                 {{ if eq (lower .Name) (lower $currentAttrName) }}
-                {{ $usedIn = $usedIn | append (dict "name" $objData.Name "type" "Business Object" "link" (printf
-                "/objects/%s/" (lower $objID)) "icon" "file-text" "color" "var(--s4a-red)") }}
+                {{ $found = true }}
                 {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ if $found }}
+                {{ $usedIn = $usedIn | append (dict "name" $objData.Name "type" "Business Object" "link" (printf
+                "objects/%s/" (lower $objID) | relURL) "icon" "file-text" "color" "var(--s4a-red)") }}
                 {{ end }}
                 {{ end }}
 
-                <!-- Scan Perspectives within Objects -->
+                <!-- Scan Perspectives -->
+                {{ range $objID, $objData := site.Data.objects }}
                 {{ if $objData.SystemPerspectives }}
                 {{ range $perspID, $perspData := $objData.SystemPerspectives }}
+                {{ $found := false }}
                 {{ if $perspData.RelevantAttributes }}
                 {{ range $perspData.RelevantAttributes }}
                 {{ if eq (lower .Name) (lower $currentAttrName) }}
-                {{ $usedIn = $usedIn | append (dict "name" $perspID "type" "Perspective" "link" (printf
-                "/perspectives/%s/" (urlize $perspID)) "icon" "album" "color" "var(--s4a-light-violet)") }}
+                {{ $found = true }}
                 {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ if $found }}
+                {{ $usedIn = $usedIn | append (dict "name" $perspID "type" "Perspective" "link" (printf
+                "perspectives/%s/" (urlize $perspID) | relURL) "icon" "album" "color" "var(--s4a-light-violet)") }}
                 {{ end }}
                 {{ end }}
                 {{ end }}
@@ -236,6 +247,7 @@
 
                 <!-- Scan Views -->
                 {{ range $viewID, $viewData := site.Data.views }}
+                {{ $found := false }}
                 {{ if $viewData.IncludedAttributes }}
                 {{ range $viewData.IncludedAttributes }}
                 {{ $attrName := "" }}
@@ -246,16 +258,19 @@
                 {{ end }}
 
                 {{ if eq (lower $attrName) (lower $currentAttrName) }}
+                {{ $found = true }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+
+                {{ if $found }}
                 {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
                 {{ $viewTitle := $viewID }}
                 {{ if $viewPage }}
                 {{ $viewTitle = $viewPage.Title }}
                 {{ end }}
-                {{ $usedIn = $usedIn | append (dict "name" $viewTitle "type" "UI View" "link" (printf "/views/%s/"
-                $viewID) "icon" "laptop" "color" "var(--s4a-dark-violet)") }}
-                {{ end }}
-                {{ end }}
-                {{ end }}
+                {{ $usedIn = $usedIn | append (dict "name" $viewTitle "type" "UI View" "link" (printf "views/%s/"
+                $viewID | relURL) "icon" "laptop" "color" "var(--s4a-dark-violet)") }}
                 {{ end }}
                 {{ end }}
 
@@ -281,67 +296,20 @@
                 </div>
 
                 <!-- Data Lineage Visualization -->
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
-                    <div class="mermaid">
-                        graph LR
-                        {{ $safeName := $attributeData.name | replaceRE "[()]" "" }}
-                        root["{{ $safeName }}"]
-                        style root fill:#f5f5f5,stroke:#666,stroke-width:2px,color:#333
-
-                        {{ if .Params.sourceSystem }}
-                        source[("{{ .Params.sourceSystem }}")]
-                        style source fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
-                        source -.-> root
-                        {{ end }}
-
-                        {{ range $index, $item := $usedIn }}
-                        {{ $itemName := $item.name | default "Unnamed Node" }}
-                        {{ $safeItemName := $itemName | replaceRE "[()]" "" }}
-                        node{{ $index }}["{{ $safeItemName }}"]
-                        root -.-> node{{ $index }}
-
-                        {{ if eq $item.type "Business Object" }}
-                        style node{{ $index }} fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
-                        {{ else if eq $item.type "Perspective" }}
-                        style node{{ $index }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
-                        {{ else if eq $item.type "UI View" }}
-                        style node{{ $index }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
-                        {{ end }}
-
-                        click node{{ $index }} "{{ $item.link }}"
-                        {{ end }}
+                <!-- Data Lineage Visualization -->
+                {{ partial "lineage-map.html" (dict "Context" . "UsedIn" $usedIn) }}
+                {{ end }}
+                {{ else }}
+                <!-- Error message if attribute data not found -->
+                <div class="uk-section">
+                    <div class="uk-container">
+                        <div class="uk-alert uk-alert-danger">
+                            <h3>Attribute Not Found</h3>
+                            <p>The requested attribute could not be loaded from the data registry.</p>
+                            <p><a href="{{ `attributes` | relURL }}">← Back to Attributes</a></p>
+                        </div>
                     </div>
                 </div>
                 {{ end }}
 
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<!-- Mermaid JS for Lineage Graph -->
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-        startOnLoad: true,
-        theme: 'neutral',
-        securityLevel: 'loose',
-        flowchart: { curve: 'basis' }
-    });
-</script>
-{{ else }}
-<!-- Error message if attribute data not found -->
-<div class="uk-section">
-    <div class="uk-container">
-        <div class="uk-alert uk-alert-danger">
-            <h3>Attribute Not Found</h3>
-            <p>The requested attribute could not be loaded from the data registry.</p>
-            <p><a href="{{ `attributes` | relURL }}">← Back to Attributes</a></p>
-        </div>
-    </div>
-</div>
-{{ end }}
-
-{{ end }}
+                {{ end }}

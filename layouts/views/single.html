@@ -206,62 +206,8 @@
                 {{ end }}
 
                 <!-- Data Lineage Map -->
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
-                    <div class="mermaid">
-                        graph LR
-                        {{ $safeViewName := .Title | replaceRE "[^a-zA-Z0-9]" "" }}
-                        view["{{ .Title }}"]
-                        style view fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:2px
-
-                        %% Upstream Attributes (Sample)
-                        {{ if $viewData.IncludedAttributes }}
-                        subgraph Data Elements
-                        direction TB
-                        {{ range first 5 $viewData.IncludedAttributes }}
-                        {{ $attrName := "" }}
-                        {{ if reflect.IsMap . }}{{ $attrName = .Name }}{{ else }}{{ $attrName = . }}{{ end }}
-                        {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        attr_{{ $safeAttrName }}["{{ $attrName }}"]
-                        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        attr_{{ $safeAttrName }} -.-> view
-                        {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
-                        {{ if $attrPage }}
-                        click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
-                        {{ end }}
-                        {{ end }}
-                        {{ if gt (len $viewData.IncludedAttributes) 5 }}
-                        more_attr["...and {{ sub (len $viewData.IncludedAttributes) 5 }} more"]
-                        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        more_attr -.-> view
-                        {{ end }}
-                        end
-                        {{ end }}
-
-                        %% Downstream Roles
-                        {{ if $viewData.AccessRules }}
-                        {{ range $viewData.AccessRules }}
-                        {{ $roleName := "" }}
-                        {{ if reflect.IsMap . }}{{ $roleName = .Role | default .userRole }}{{ else }}{{ $roleName = .
-                        }}{{ end }}
-                        {{ $safeRoleName := $roleName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        role_{{ $safeRoleName }}("{{ $roleName }}")
-                        style role_{{ $safeRoleName }} fill:#e0f2f1,stroke:#00695c,color:#00695c,stroke-width:1px
-                        view -.-> role_{{ $safeRoleName }}
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                </div>
-
-                <script type="module">
-                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-                    mermaid.initialize({
-                        startOnLoad: true,
-                        theme: 'neutral',
-                        securityLevel: 'loose',
-                        flowchart: { curve: 'basis' }
-                    });
-                </script>
+                <!-- Data Lineage Map -->
+                {{ partial "lineage-map.html" (dict "Context" .) }}
 
                 <!-- UI View Mockup -->
                 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">

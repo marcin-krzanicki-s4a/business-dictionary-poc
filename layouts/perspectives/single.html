@@ -145,63 +145,8 @@
                 </div>
 
                 <!-- Data Lineage Map -->
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
-                    <div class="mermaid">
-                        graph LR
-                        {{ $safePerspName := $perspectiveID | replaceRE "[()]" "" }}
-                        persp["{{ $safePerspName }}"]
-                        style persp fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:2px
-
-                        %% Upstream Object
-                        {{ $safeObjectName := $objectData.Name | replaceRE "[()]" "" }}
-                        object["{{ $safeObjectName }}<br />(Canonical Object)"]
-                        style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
-                        object -.-> persp
-                        click object "{{ `objects/` | relURL }}{{ $objectID | lower }}"
-
-                        %% Extended Attributes (Perspective Specific)
-                        {{ if $sysData.RelevantAttributes }}
-                        subgraph Extended Attributes
-                        direction TB
-                        {{ range first 5 $sysData.RelevantAttributes }}
-                        {{ $attrName := .Name }}
-                        {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        attr_{{ $safeAttrName }}["{{ $attrName }}"]
-                        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        attr_{{ $safeAttrName }} -.-> persp
-                        {{ end }}
-                        {{ if gt (len $sysData.RelevantAttributes) 5 }}
-                        more_attr["...and {{ sub (len $sysData.RelevantAttributes) 5 }} more"]
-                        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        more_attr -.-> persp
-                        {{ end }}
-                        end
-                        {{ end }}
-
-                        %% Downstream Views
-                        {{ if $sysData.ViewsUsed }}
-                        {{ range $sysData.ViewsUsed }}
-                        {{ $viewName := .ref }}
-                        {{ $safeViewName := $viewName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        view_{{ $safeViewName }}["{{ $viewName }}"]
-                        style view_{{ $safeViewName }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
-                        persp -.-> view_{{ $safeViewName }}
-                        click view_{{ $safeViewName }} "{{ `views/` | relURL }}{{ $viewName }}"
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                </div>
-
-                <script type="module">
-                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-                    mermaid.initialize({
-                        startOnLoad: true,
-                        theme: 'neutral',
-                        securityLevel: 'loose',
-                        flowchart: { curve: 'basis' }
-                    });
-                </script>
+                <!-- Data Lineage Map -->
+                {{ partial "lineage-map.html" (dict "Context" .) }}
 
             </div>
         </div>

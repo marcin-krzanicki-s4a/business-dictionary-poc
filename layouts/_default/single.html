@@ -163,85 +163,8 @@
                 </div>
 
                 <!-- Data Lineage Map -->
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
-                    <div class="mermaid">
-                        graph LR
-                        {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
-                        object["{{ $objectData.Name }}"]
-                        style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:2px
-
-                        %% System of Record (Simulated)
-                        system[("System of Record<br />(e.g. SAP/Amadeus)")]
-                        style system fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
-                        system -.-> object
-
-                        %% Core Attributes (Upstream)
-                        {{ if $objectData.CoreAttributes }}
-                        subgraph Attributes
-                        direction TB
-                        {{ range first 5 $objectData.CoreAttributes }}
-                        {{ $safeAttrName := .Name | replaceRE "[^a-zA-Z0-9]" "" }}
-                        attr_{{ $safeAttrName }}["{{ .Name }}"]
-                        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        attr_{{ $safeAttrName }} -.-> object
-                        {{ end }}
-                        {{ if gt (len $objectData.CoreAttributes) 5 }}
-                        more_attr["...and {{ sub (len $objectData.CoreAttributes) 5 }} more"]
-                        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-                        more_attr -.-> object
-                        {{ end }}
-                        end
-                        {{ end }}
-
-                        %% Related Objects (Relationships)
-                        {{ if $objectData.CoreRelationships }}
-                        {{ range $objectData.CoreRelationships }}
-                        {{ $relatedObjName := .object }}
-                        {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        {{ $relType := .type }}
-                        rel_{{ $safeRelObjName }}["{{ $relatedObjName }}"]
-                        style rel_{{ $safeRelObjName }} fill:#fff3e0,stroke:#e65100,color:#e65100,stroke-width:1px
-                        {{ if or (eq $relType "has-one") (eq $relType "has-many") (eq $relType "has-many (transient)")
-                        }}
-                        object -.->|"{{ $relType }}"| rel_{{ $safeRelObjName }}
-                        {{ else }}
-                        rel_{{ $safeRelObjName }} -.->|"{{ $relType }}"| object
-                        {{ end }}
-                        click rel_{{ $safeRelObjName }} "/objects/{{ $relatedObjName | lower }}"
-                        {{ end }}
-                        {{ end }}
-
-                        %% Perspectives (Downstream)
-                        {{ if $objectData.SystemPerspectives }}
-                        {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
-                        {{ $safeSysName := $sysName | replaceRE "[^a-zA-Z0-9]" "" }}
-                        persp_{{ $safeSysName }}["{{ $sysName }}"]
-                        style persp_{{ $safeSysName }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
-                        object -.-> persp_{{ $safeSysName }}
-
-                        %% Link to perspective page if possible
-                        {{ $perspectivePage := "" }}
-                        {{ range where site.RegularPages "Section" "perspectives" }}
-                        {{ if and (eq .Params.object_id $objectID) (eq .Params.perspective_id $sysName) }}
-                        click persp_{{ $safeSysName }} "{{ .RelPermalink }}"
-                        {{ end }}
-                        {{ end }}
-
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                </div>
-
-                <script type="module">
-                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-                    mermaid.initialize({
-                        startOnLoad: true,
-                        theme: 'neutral',
-                        securityLevel: 'loose',
-                        flowchart: { curve: 'basis' }
-                    });
-                </script>
+                <!-- Data Lineage Map -->
+                {{ partial "lineage-map.html" (dict "Context" .) }}
             </div>
         </div>
     </div>

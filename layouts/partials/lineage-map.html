@@ -1,0 +1,215 @@
+<div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
+    <div class="mermaid">
+        graph LR
+        {{ $page := .Context }}
+        {{ $section := $page.Section }}
+
+        {{ if eq $section "objects" }}
+        {{/* --- OBJECT LINEAGE --- */}}
+        {{ $objectID := $page.File.BaseFileName }}
+        {{ $objectData := index site.Data.objects $objectID }}
+
+        {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
+        object["{{ $objectData.Name }}"]
+        style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:2px
+
+        %% System of Record (Simulated)
+        system[("System of Record<br />(e.g. SAP/Amadeus)")]
+        style system fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+        system -.-> object
+
+        %% Core Attributes (Upstream)
+        {{ if $objectData.CoreAttributes }}
+        subgraph Attributes
+        direction TB
+        {{ range first 5 $objectData.CoreAttributes }}
+        {{ $safeAttrName := .Name | replaceRE "[^a-zA-Z0-9]" "" }}
+        attr_{{ $safeAttrName }}["{{ .Name }}"]
+        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        attr_{{ $safeAttrName }} -.-> object
+        {{ end }}
+        {{ if gt (len $objectData.CoreAttributes) 5 }}
+        more_attr["...and {{ sub (len $objectData.CoreAttributes) 5 }} more"]
+        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        more_attr -.-> object
+        {{ end }}
+        end
+        {{ end }}
+
+        %% Related Objects (Relationships)
+        {{ if $objectData.CoreRelationships }}
+        {{ range $objectData.CoreRelationships }}
+        {{ $relatedObjName := .object }}
+        {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
+        {{ $relType := .type }}
+        rel_{{ $safeRelObjName }}["{{ $relatedObjName }}"]
+        style rel_{{ $safeRelObjName }} fill:#fff3e0,stroke:#e65100,color:#e65100,stroke-width:1px
+        {{ if or (eq $relType "has-one") (eq $relType "has-many") (eq $relType "has-many (transient)") }}
+        object -.->|"{{ $relType }}"| rel_{{ $safeRelObjName }}
+        {{ else }}
+        rel_{{ $safeRelObjName }} -.->|"{{ $relType }}"| object
+        {{ end }}
+        click rel_{{ $safeRelObjName }} "{{ (printf "objects/%s" ($relatedObjName | lower)) | relURL }}"
+        {{ end }}
+        {{ end }}
+
+        %% Perspectives (Downstream)
+        {{ if $objectData.SystemPerspectives }}
+        {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
+        {{ $safeSysName := $sysName | replaceRE "[^a-zA-Z0-9]" "" }}
+        persp_{{ $safeSysName }}["{{ $sysName }}"]
+        style persp_{{ $safeSysName }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
+        object -.-> persp_{{ $safeSysName }}
+
+        %% Link to perspective page if possible
+        {{ $perspectivePage := "" }}
+        {{ range where site.RegularPages "Section" "perspectives" }}
+        {{ if and (eq .Params.object_id $objectID) (eq .Params.perspective_id $sysName) }}
+        click persp_{{ $safeSysName }} "{{ .RelPermalink }}"
+        {{ end }}
+        {{ end }}
+
+        {{ end }}
+        {{ end }}
+
+        {{ else if eq $section "views" }}
+        {{/* --- VIEW LINEAGE --- */}}
+        {{ $viewID := $page.File.BaseFileName }}
+        {{ $viewData := index site.Data.views $viewID }}
+
+        {{ $safeViewName := $page.Title | replaceRE "[^a-zA-Z0-9]" "" }}
+        view["{{ $page.Title }}"]
+        style view fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:2px
+
+        %% Upstream Attributes (Sample)
+        {{ if $viewData.IncludedAttributes }}
+        subgraph Data Elements
+        direction TB
+        {{ range first 5 $viewData.IncludedAttributes }}
+        {{ $attrName := "" }}
+        {{ if reflect.IsMap . }}{{ $attrName = .Name }}{{ else }}{{ $attrName = . }}{{ end }}
+        {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
+        attr_{{ $safeAttrName }}["{{ $attrName }}"]
+        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        attr_{{ $safeAttrName }} -.-> view
+        {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
+        {{ if $attrPage }}
+        click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
+        {{ end }}
+        {{ end }}
+        {{ if gt (len $viewData.IncludedAttributes) 5 }}
+        more_attr["...and {{ sub (len $viewData.IncludedAttributes) 5 }} more"]
+        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        more_attr -.-> view
+        {{ end }}
+        end
+        {{ end }}
+
+        %% Downstream Roles
+        {{ if $viewData.AccessRules }}
+        {{ range $viewData.AccessRules }}
+        {{ $roleName := "" }}
+        {{ if reflect.IsMap . }}{{ $roleName = .Role | default .userRole }}{{ else }}{{ $roleName = . }}{{ end }}
+        {{ $safeRoleName := $roleName | replaceRE "[^a-zA-Z0-9]" "" }}
+        role_{{ $safeRoleName }}("{{ $roleName }}")
+        style role_{{ $safeRoleName }} fill:#e0f2f1,stroke:#00695c,color:#00695c,stroke-width:1px
+        view -.-> role_{{ $safeRoleName }}
+        {{ end }}
+        {{ end }}
+
+        {{ else if eq $section "perspectives" }}
+        {{/* --- PERSPECTIVE LINEAGE --- */}}
+        {{ $objectID := $page.Params.object_id }}
+        {{ $perspectiveID := $page.Params.perspective_id }}
+        {{ $objectData := index site.Data.objects $objectID }}
+        {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
+
+        {{ $safePerspName := $perspectiveID | replaceRE "[()]" "" }}
+        persp["{{ $safePerspName }}"]
+        style persp fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:2px
+
+        %% Upstream Object
+        {{ $safeObjectName := $objectData.Name | replaceRE "[()]" "" }}
+        object["{{ $safeObjectName }}<br />(Canonical Object)"]
+        style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
+        object -.-> persp
+        click object "{{ `objects/` | relURL }}{{ $objectID | lower }}"
+
+        %% Extended Attributes (Perspective Specific)
+        {{ if $sysData.RelevantAttributes }}
+        subgraph Extended Attributes
+        direction TB
+        {{ range first 5 $sysData.RelevantAttributes }}
+        {{ $attrName := .Name }}
+        {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
+        attr_{{ $safeAttrName }}["{{ $attrName }}"]
+        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        attr_{{ $safeAttrName }} -.-> persp
+        {{ end }}
+        {{ if gt (len $sysData.RelevantAttributes) 5 }}
+        more_attr["...and {{ sub (len $sysData.RelevantAttributes) 5 }} more"]
+        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
+        more_attr -.-> persp
+        {{ end }}
+        end
+        {{ end }}
+
+        %% Downstream Views
+        {{ if $sysData.ViewsUsed }}
+        {{ range $sysData.ViewsUsed }}
+        {{ $viewName := .ref }}
+        {{ $safeViewName := $viewName | replaceRE "[^a-zA-Z0-9]" "" }}
+        view_{{ $safeViewName }}["{{ $viewName }}"]
+        style view_{{ $safeViewName }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
+        persp -.-> view_{{ $safeViewName }}
+        click view_{{ $safeViewName }} "{{ `views/` | relURL }}{{ $viewName }}"
+        {{ end }}
+        {{ end }}
+
+        {{ else if eq $section "attributes" }}
+        {{/* --- ATTRIBUTE LINEAGE --- */}}
+        {{ $attributeID := $page.File.BaseFileName }}
+        {{ $attributeData := index site.Data.attributes $attributeID }}
+        {{ $usedIn := .UsedIn }}
+
+        {{ $safeName := $attributeData.name | replaceRE "[()]" "" }}
+        root["{{ $safeName }}"]
+        style root fill:#f5f5f5,stroke:#666,stroke-width:2px,color:#333
+
+        {{ if $page.Params.sourceSystem }}
+        source[("{{ $page.Params.sourceSystem }}")]
+        style source fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+        source -.-> root
+        {{ end }}
+
+        {{ range $index, $item := $usedIn }}
+        {{ $itemName := $item.name | default "Unnamed Node" }}
+        {{ $safeItemName := $itemName | replaceRE "[()]" "" }}
+        node{{ $index }}["{{ $safeItemName }}"]
+        root -.-> node{{ $index }}
+
+        {{ if eq $item.type "Business Object" }}
+        style node{{ $index }} fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
+        {{ else if eq $item.type "Perspective" }}
+        style node{{ $index }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
+        {{ else if eq $item.type "UI View" }}
+        style node{{ $index }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
+        {{ end }}
+
+        click node{{ $index }} "{{ $item.link }}"
+        {{ end }}
+
+        {{ end }}
+    </div>
+</div>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        securityLevel: 'loose',
+        flowchart: { curve: 'basis' }
+    });
+</script>
