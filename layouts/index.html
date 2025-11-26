@@ -1,0 +1,97 @@
+{{ define "main" }}
+<!-- Hero Section -->
+<div class="hero-section uk-section uk-section-large uk-text-center">
+    <!-- Mesh Gradient Background -->
+    <div class="hero-bg">
+        <div class="gradient-blob blob-1"></div>
+        <div class="gradient-blob blob-2"></div>
+        <div class="gradient-blob blob-3"></div>
+        <div class="gradient-blob blob-4"></div>
+    </div>
+    <div class="uk-container" style="position: relative; z-index: 2;">
+        <h1 class="uk-heading-medium uk-margin-small-bottom uk-text-bold">
+            Master the <span class="uk-text-light-accent">Business Language</span>
+        </h1>
+        <p class="uk-text-lead uk-margin-medium-top uk-width-3-4@m uk-margin-auto">
+            Find clear, standardized definitions for all core business objects, views, and concepts across the
+            enterprise.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="uk-margin-medium-top uk-width-2-3@m uk-margin-auto">
+            <div class="uk-search uk-search-default uk-search-large uk-width-1-1">
+                <span uk-search-icon></span>
+                <input id="search-input" class="uk-search-input uk-width-1-1" type="search"
+                    placeholder="Search for Business Objects, Perspectives, or Views (e.g., 'Airline', 'Route Management')..."
+                    aria-label="Search">
+            </div>
+            <div id="search-results" class="uk-margin-medium-top" style="display: none;">
+                <div class="uk-card uk-card-default uk-card-body">
+                    <ul id="results-list" class="uk-list uk-list-divider"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Cards -->
+<div class="uk-section uk-section-muted">
+    <div class="uk-container">
+        <h2 class="uk-h3 uk-text-center uk-margin-large-bottom" style="color: var(--s4a-dark-violet);">Quick Access
+            Categories</h2>
+        <div class="uk-child-width-1-4@m uk-grid-match" uk-grid>
+
+            <!-- Card 0: Global Attributes -->
+            <div>
+                <div class="uk-card uk-card-default uk-card-body uk-card-shadow uk-text-center uk-height-1-1">
+                    <div class="quick-access-icon" uk-icon="icon: tag; ratio: 2.5"></div>
+                    <h3 class="uk-card-title" style="color: var(--s4a-light-violet);">Attributes</h3>
+                    <p class="uk-text-small">Global registry of reusable data attributes, formats, and constraints.</p>
+                    <a href="{{ `attributes` | relURL }}"
+                        class="uk-button uk-button-primary uk-button-small uk-margin-top">Explore
+                        Attributes</a>
+                </div>
+            </div>
+
+            <!-- Card 1: Business Objects -->
+            <div>
+                <div class="uk-card uk-card-default uk-card-body uk-card-shadow uk-text-center uk-height-1-1">
+                    <div class="quick-access-icon" uk-icon="icon: file-text; ratio: 2.5"></div>
+                    <h3 class="uk-card-title" style="color: var(--s4a-light-violet);">Business Objects</h3>
+                    <p class="uk-text-small">Fundamental business entities and their definitions, attributes, and
+                        relationships.</p>
+                    <a href="{{ `objects` | relURL }}"
+                        class="uk-button uk-button-primary uk-button-small uk-margin-top">Explore
+                        Objects</a>
+                </div>
+            </div>
+
+            <!-- Card 2: Perspectives -->
+            <div>
+                <div class="uk-card uk-card-default uk-card-body uk-card-shadow uk-text-center uk-height-1-1">
+                    <div class="quick-access-icon" uk-icon="icon: album; ratio: 2.5"></div>
+                    <h3 class="uk-card-title" style="color: var(--s4a-light-violet);">Perspectives</h3>
+                    <p class="uk-text-small">Business contexts and system viewpoints that group related objects and
+                        rules.</p>
+                    <a href="{{ `perspectives` | relURL }}"
+                        class="uk-button uk-button-primary uk-button-small uk-margin-top">Explore
+                        Perspectives</a>
+                </div>
+            </div>
+
+            <!-- Card 3: UI Views -->
+            <div>
+                <div class="uk-card uk-card-default uk-card-body uk-card-shadow uk-text-center uk-height-1-1">
+                    <div class="quick-access-icon" uk-icon="icon: laptop; ratio: 2.5"></div>
+                    <h3 class="uk-card-title" style="color: var(--s4a-light-violet);">Views</h3>
+                    <p class="uk-text-small">User interface definitions and screen layouts mapped to business data.</p>
+                    <a href="{{ `views` | relURL }}"
+                        class="uk-button uk-button-primary uk-button-small uk-margin-top">Explore
+                        Views</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{{ end }}

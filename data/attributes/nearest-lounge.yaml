@@ -1,0 +1,6 @@
+id: ATTR-123
+name: Nearest Lounge
+description: Attribute representing Nearest Lounge.
+dataType: String
+source: Auto-generated
+status: draft

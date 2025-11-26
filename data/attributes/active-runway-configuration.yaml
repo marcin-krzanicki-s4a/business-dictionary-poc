@@ -1,0 +1,6 @@
+id: ATTR-100
+name: Active Runway Configuration
+description: Attribute representing Active Runway Configuration.
+dataType: String
+source: Auto-generated
+status: draft

@@ -1,0 +1,7 @@
+id: ATTR-015
+name: Scheduled Arrival Time
+description: Planned time when aircraft will arrive.
+dataType: DateTime
+format: "ISO 8601"
+usedIn:
+  - FLIGHT

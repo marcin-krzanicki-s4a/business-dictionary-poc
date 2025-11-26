@@ -1,0 +1,9 @@
+id: ATTR-012
+name: Wind Speed
+description: Velocity of wind movement.
+dataType: Decimal
+unit: "km/h"
+minValue: 0
+usedIn:
+  - CurrentWeather
+  - AIRPORT

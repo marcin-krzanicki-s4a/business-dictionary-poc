@@ -1,0 +1,10 @@
+id: ATTR-111
+name: Distance to Gate
+description: Attribute representing Distance to Gate.
+dataType: Decimal
+source: Inferred
+status: active
+unit: km
+precision: 1
+minValue: 0.0
+example: 1500.0

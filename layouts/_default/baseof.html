@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{ or site.Language.LanguageCode site.Language.Lang }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | {{ site.Title }}</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- UIKit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ `css/style.css` | relURL }}?v={{ now.Unix }}">
+
+    <!-- UIKit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="uk-navbar-container uk-dark">
+        <div class="uk-container">
+            <nav class="uk-navbar" uk-navbar>
+                <div class="uk-navbar-left">
+                    <a class="uk-navbar-item uk-logo" href="{{ site.Home.RelPermalink }}">
+                        <img src="{{ `images/logoS4A.svg` | relURL }}" alt="S4A"
+                            style="height: 40px; margin-right: 10px;"> Dictionary
+                    </a>
+                </div>
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+                        <li class="{{ if .IsHome }}uk-active{{ end }}"><a href="{{ site.Home.RelPermalink }}">Home</a>
+                        </li>
+                        <li class="{{ if eq .Section `browse` }}uk-active{{ end }}"><a
+                                href="{{ `browse` | relURL }}">Browse All</a></li>
+                        <li class="{{ if eq .Section `attributes` }}uk-active{{ end }}"><a
+                                href="{{ `attributes` | relURL }}">Attributes</a></li>
+                        <li class="{{ if eq .Section `objects` }}uk-active{{ end }}"><a
+                                href="{{ `objects` | relURL }}">Objects</a></li>
+                        <li class="{{ if eq .Section `perspectives` }}uk-active{{ end }}"><a
+                                href="{{ `perspectives` | relURL }}">Perspectives</a></li>
+                        <li class="{{ if eq .Section `views` }}uk-active{{ end }}"><a
+                                href="{{ `views` | relURL }}">Views</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        {{ block "main" . }}{{ end }}
+    </div>
+
+    <!-- Footer -->
+    <div class="uk-section uk-section-xsmall uk-section-primary-dark">
+        <div class="uk-container uk-text-small uk-text-center uk-light">
+            <p>&copy; {{ now.Year }} S4A Business Dictionary. All Rights Reserved. | Designed with UIKit.</p>
+        </div>
+    </div>
+
+    <!-- List filtering script -->
+    <script src="{{ `js/list-filter.js` | relURL }}"></script>
+    
+    <!-- Search script -->
+    <script src="{{ `js/search.js` | relURL }}"></script>
+    
+    <!-- Role-based access simulator -->
+    <script src="{{ `js/role-simulator.js` | relURL }}"></script>
+
+</body>
+
+</html>

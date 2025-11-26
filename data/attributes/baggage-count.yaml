@@ -1,0 +1,8 @@
+id: ATTR-016
+name: Baggage Count
+description: Total number of baggage items.
+dataType: Integer
+minValue: 0
+usedIn:
+  - FLIGHT
+  - PASSENGER

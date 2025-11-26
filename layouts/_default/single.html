@@ -1,0 +1,256 @@
+{{ define "main" }}
+{{ $objectID := .File.BaseFileName }}
+{{ $objectData := index site.Data.objects $objectID }}
+
+{{ if $objectData }}
+<!-- Header Section -->
+<div class="uk-section uk-section-xsmall uk-padding-remove-bottom">
+    <div class="uk-container">
+
+        <!-- Breadcrumbs -->
+        <ul class="uk-breadcrumb uk-margin-small-bottom">
+            <li><a href="{{ site.Home.RelPermalink }}">Home</a></li>
+            <li><a href="{{ `objects` | relURL }}">Objects</a></li>
+            <!-- <li class="uk-disabled"><span>{{ $objectData.Name }}</span></li> -->
+        </ul>
+
+        <div class="uk-flex uk-flex-middle uk-margin-medium-bottom">
+            <h1 class="uk-heading-medium uk-margin-remove-bottom uk-margin-right">{{ $objectData.Name }}</h1>
+            {{ $status := $objectData.Status | default "Draft" }}
+            <span class="uk-badge uk-padding-small" style="{{ if eq (lower $status) `draft` }}background-color:
+                var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ end
+                }}">{{ $status }}</span>
+        </div>
+
+        <p class="uk-text-lead uk-text-muted uk-margin-remove-top uk-margin-medium-bottom">
+            {{ if $objectData.TermID }}<span style="color: var(--s4a-light-violet);">ID: {{ $objectData.TermID }}</span>
+            | {{ end }}Category: Business Object
+            {{ if $objectData.Steward }} | Steward: {{ $objectData.Steward }}{{ end }}
+        </p>
+    </div>
+</div>
+
+<!-- Content Grid Section -->
+<div class="uk-section uk-section-default uk-padding-small">
+    <div class="uk-container">
+
+        <div class="uk-grid-medium" uk-grid>
+
+            <!-- Main Column (Definition, Tables) -->
+            <div class="uk-width-1-1">
+
+                <!-- Definition & Context -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3 uk-text-primary-red">Core Definition</h2>
+                    <div class="uk-text-lead">{{ $objectData.BusinessDefinition }}</div>
+
+                    {{ if $objectData.BusinessRules }}
+                    <h3 class="uk-h4 uk-margin-top">Business Rules</h3>
+                    <ul class="uk-list uk-list-bullet uk-text-small">
+                        {{ range $objectData.BusinessRules }}
+                        <li>{{ . }}</li>
+                        {{ end }}
+                    </ul>
+                    {{ end }}
+                </div>
+
+                <!-- Key Attributes Table -->
+                {{ if $objectData.CoreAttributes }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-top uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Key Attributes (Data Model)</h2>
+                    <div class="uk-overflow-auto">
+                        <table
+                            class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-responsive uk-margin-top">
+                            <thead>
+                                <tr>
+                                    <th class="uk-table-expand">Attribute Name</th>
+                                    <th>Data Type</th>
+                                    <th>Source</th>
+                                    <th class="uk-table-expand">Values/Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $objectData.CoreAttributes }}
+                                <tr>
+                                    <td>
+                                        {{ $attrName := .Name }}
+                                        {{ $attrLink := "" }}
+                                        {{ range $id, $data := site.Data.attributes }}
+                                        {{ if eq (lower $data.name) (lower $attrName) }}
+                                        {{ $attrLink = printf "attributes/%s" $id | relURL }}
+                                        {{ end }}
+                                        {{ end }}
+
+                                        {{ if $attrLink }}
+                                        <a href="{{ $attrLink }}" class="uk-link-text"
+                                            style="text-decoration: underline;"><code>{{ .Name }}</code></a>
+                                        {{ else }}
+                                        <code>{{ .Name }}</code>
+                                        {{ end }}
+                                    </td>
+                                    <td>{{ .Type }}</td>
+                                    <td>{{ .Source }}</td>
+                                    <td>{{ .Values }}</td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{ end }}
+
+                <!-- Relationships Table -->
+                {{ if $objectData.CoreRelationships }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-top uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Relationships</h2>
+                    <div class="uk-overflow-auto">
+                        <table
+                            class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-responsive uk-margin-top">
+                            <thead>
+                                <tr>
+                                    <th>Target Object</th>
+                                    <th>Type</th>
+                                    <th>Dependency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $objectData.CoreRelationships }}
+                                <tr>
+                                    <td><a href="{{ `objects/` | relURL }}{{ .object | lower }}">{{ .object }}</a></td>
+                                    <td>{{ .type }}</td>
+                                    <td>{{ .dependency }}</td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{ end }}
+
+
+
+
+                <!-- Related Perspectives -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h3 class="uk-card-title" style="color: var(--s4a-dark-violet);">Related Perspectives</h3>
+                    <p class="uk-text-small uk-text-muted">Objects are viewed through different lenses for specialized
+                        processes.</p>
+
+                    {{ if $objectData.SystemPerspectives }}
+                    <ul class="uk-list uk-list-divider uk-text-small">
+                        {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
+                        <!-- Find the perspective page -->
+                        {{ $perspectivePage := "" }}
+                        {{ range where site.RegularPages "Section" "perspectives" }}
+                        {{ if and (eq .Params.object_id $objectID) (eq .Params.perspective_id $sysName) }}
+                        {{ $perspectivePage = . }}
+                        {{ end }}
+                        {{ end }}
+
+                        {{ if $perspectivePage }}
+                        <li><a href="{{ $perspectivePage.RelPermalink }}" class="uk-link-toggle"><span
+                                    class="uk-text-primary-red" uk-icon="icon: album"></span> {{ $sysName }}</a></li>
+                        {{ else }}
+                        <li><span class="uk-text-muted" uk-icon="icon: close-circle"></span> {{ $sysName }} (Perspective
+                            Not Found)
+                        </li>
+                        {{ end }}
+                        {{ end }}
+                    </ul>
+                    {{ else }}
+                    <p class="uk-text-small uk-text-muted">No specific perspectives linked to this object yet.</p>
+                    {{ end }}
+                </div>
+
+                <!-- Data Lineage Map -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
+                    <div class="mermaid">
+                        graph LR
+                        {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
+                        object["{{ $objectData.Name }}"]
+                        style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:2px
+
+                        %% System of Record (Simulated)
+                        system[("System of Record<br />(e.g. SAP/Amadeus)")]
+                        style system fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+                        system -.-> object
+
+                        %% Core Attributes (Upstream)
+                        {{ if $objectData.CoreAttributes }}
+                        subgraph Attributes
+                        direction TB
+                        {{ range first 5 $objectData.CoreAttributes }}
+                        {{ $safeAttrName := .Name | replaceRE "[^a-zA-Z0-9]" "" }}
+                        attr_{{ $safeAttrName }}["{{ .Name }}"]
+                        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
+                        attr_{{ $safeAttrName }} -.-> object
+                        {{ end }}
+                        {{ if gt (len $objectData.CoreAttributes) 5 }}
+                        more_attr["...and {{ sub (len $objectData.CoreAttributes) 5 }} more"]
+                        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
+                        more_attr -.-> object
+                        {{ end }}
+                        end
+                        {{ end }}
+
+                        %% Related Objects (Relationships)
+                        {{ if $objectData.CoreRelationships }}
+                        {{ range $objectData.CoreRelationships }}
+                        {{ $relatedObjName := .object }}
+                        {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
+                        {{ $relType := .type }}
+                        rel_{{ $safeRelObjName }}["{{ $relatedObjName }}"]
+                        style rel_{{ $safeRelObjName }} fill:#fff3e0,stroke:#e65100,color:#e65100,stroke-width:1px
+                        {{ if or (eq $relType "has-one") (eq $relType "has-many") (eq $relType "has-many (transient)")
+                        }}
+                        object -.->|"{{ $relType }}"| rel_{{ $safeRelObjName }}
+                        {{ else }}
+                        rel_{{ $safeRelObjName }} -.->|"{{ $relType }}"| object
+                        {{ end }}
+                        click rel_{{ $safeRelObjName }} "/objects/{{ $relatedObjName | lower }}"
+                        {{ end }}
+                        {{ end }}
+
+                        %% Perspectives (Downstream)
+                        {{ if $objectData.SystemPerspectives }}
+                        {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
+                        {{ $safeSysName := $sysName | replaceRE "[^a-zA-Z0-9]" "" }}
+                        persp_{{ $safeSysName }}["{{ $sysName }}"]
+                        style persp_{{ $safeSysName }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
+                        object -.-> persp_{{ $safeSysName }}
+
+                        %% Link to perspective page if possible
+                        {{ $perspectivePage := "" }}
+                        {{ range where site.RegularPages "Section" "perspectives" }}
+                        {{ if and (eq .Params.object_id $objectID) (eq .Params.perspective_id $sysName) }}
+                        click persp_{{ $safeSysName }} "{{ .RelPermalink }}"
+                        {{ end }}
+                        {{ end }}
+
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+
+                <script type="module">
+                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+                    mermaid.initialize({
+                        startOnLoad: true,
+                        theme: 'neutral',
+                        securityLevel: 'loose',
+                        flowchart: { curve: 'basis' }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{{ else }}
+<div class="uk-container uk-margin-large-top">
+    <div class="uk-alert-danger" uk-alert>
+        <p>Data for object <strong>{{ $objectID }}</strong> not found.</p>
+    </div>
+</div>
+{{ end }}
+{{ end }}

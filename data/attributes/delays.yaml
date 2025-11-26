@@ -1,0 +1,6 @@
+id: ATTR-108
+name: Delays
+description: Attribute representing Delays.
+dataType: String
+source: Auto-generated
+status: draft

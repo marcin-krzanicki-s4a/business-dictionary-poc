@@ -1,0 +1,6 @@
+id: ATTR-109
+name: Departure Airport
+description: Attribute representing Departure Airport.
+dataType: String
+source: Auto-generated
+status: draft

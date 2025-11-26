@@ -1,0 +1,6 @@
+id: ATTR-115
+name: Flight.FlightNumber
+description: Attribute representing Flight.FlightNumber.
+dataType: String
+source: Auto-generated
+status: draft

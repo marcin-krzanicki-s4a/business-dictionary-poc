@@ -1,0 +1,7 @@
+id: ATTR-014
+name: Scheduled Departure Time
+description: Planned time when aircraft will depart.
+dataType: DateTime
+format: "ISO 8601"
+usedIn:
+  - FLIGHT

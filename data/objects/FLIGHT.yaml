@@ -1,0 +1,141 @@
+TermID: FLIGHT-001
+Name: FLIGHT
+Steward: Network Planning
+Status: active
+BusinessDefinition: |
+  The operation of an aircraft from one airport to another, scheduled or actual,
+  identified by a flight number and date.
+
+CoreAttributes:
+  - Name: Flight Number
+    Type: String
+    Source: Scheduling System
+  - Name: Origin Date
+    Type: Date
+    Source: Scheduling System
+  - Name: Departure Airport
+    Type: String
+    Source: Scheduling System
+  - Name: Arrival Airport
+    Type: String
+    Source: Scheduling System
+  - Name: Scheduled Departure Time
+    Type: DateTime
+    Source: Scheduling System
+  - Name: Scheduled Arrival Time
+    Type: DateTime
+    Source: Scheduling System
+  - Name: Status
+    Type: Enum
+    Values: [Scheduled, Active, Landed, Cancelled, Diverted]
+    Source: Ops System
+    APICall: GET /flights/{id}/status
+
+CoreRelationships:
+  - type: has-one
+    object: AIRCRAFT
+    dependency: required
+  - type: has-many
+    object: CREW
+    dependency: required
+  - type: has-many
+    object: PASSENGER
+    dependency: optional
+
+SystemPerspectives:
+  "Crew Flight Briefing App":
+    Status: "active"
+    Context: Provides flight crew with all necessary pre-flight information.
+    PermittedUserGroups:
+      - Above the Wing
+    RelevantAttributes:
+      - Name: Flight Plan ID
+        Type: String
+        Source: Flight Planning System
+      - Name: Fuel Load
+        Type: Number
+        Unit: kg
+        Source: Fueling System
+      - Name: NOTAMs
+        Type: List
+        Source: AIS
+    SystemSpecificCTAs:
+      - Acknowledge Briefing
+      - Authorize Flight Plan
+      - Review Flight Plan
+    ViewsUsed:
+      - ref: PreFlightBriefing_MobileView
+
+  "Passenger Booking System":
+    Status: "active"
+    Context: Used by customers to search and book flights.
+    PermittedUserGroups:
+      - Public
+      - Travel Agents
+    RelevantAttributes:
+      - Name: Base Price
+        Type: Currency
+        Source: Pricing Engine
+      - Name: Seat Availability
+        Type: Integer
+        Source: Inventory System
+      - Name: Fare Class
+        Type: Enum
+        Values: [Economy, Business, First]
+    SystemSpecificCTAs:
+      - Book Seat
+      - Upgrade Fare
+      - Select Meal
+
+  "Baggage Handling System":
+    Status: "active"
+    Context: Used by baggage handlers to track and load luggage.
+    PermittedUserGroups:
+      - Baggage Handlers
+      - Ramp Agents
+    RelevantAttributes:
+      - Name: Total Bag Count
+        Type: Integer
+        Source: Check-in System
+      - Name: Total Bag Weight
+        Type: Weight
+        Source: Check-in System
+      - Name: Loading Belt
+        Type: String
+        Source: Resource Management
+    SystemSpecificCTAs:
+      - Scan Bag
+      - Close Cargo Door
+      - Report Damaged Bag
+
+  "In-Flight Entertainment System":
+    Status: "draft"
+    Context: Used by passengers on board for entertainment and services.
+    PermittedUserGroups:
+      - Passengers (Onboard)
+    RelevantAttributes:
+      - Name: Wifi Status
+        Type: Enum
+        Values: [Connected, Disconnected]
+      - Name: Flight Progress
+        Type: Percentage
+        Source: Avionics Bus
+      - Name: Time to Destination
+        Type: Duration
+        Source: Avionics Bus
+    SystemSpecificCTAs: ["Start Movie", "Call Attendant"]
+    ViewsUsed: []
+  Crew Portal:
+    Status: "active"
+    Context: "Flight crew briefing and roster view"
+    PermittedUserGroups: ["Pilot", "Cabin Crew"]
+    RelevantAttributes:
+      - Name: Flight Number
+        Type: String
+        Source: "Ops"
+      - Name: Departure Time
+        Type: DateTime
+        Source: "Ops"
+    SystemSpecificCTAs: ["Acknowledge Briefing", "Report Issue"]
+    ViewsUsed:
+      - ref: "PreFlightBriefing_MobileView"

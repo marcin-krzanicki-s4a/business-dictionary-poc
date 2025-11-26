@@ -1,0 +1,6 @@
+id: ATTR-105
+name: CrewManifest
+description: Attribute representing CrewManifest.
+dataType: String
+source: Auto-generated
+status: draft

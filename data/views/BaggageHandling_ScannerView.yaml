@@ -1,0 +1,18 @@
+Description: "Mobile view for baggage handlers."
+Platform: "Handheld Scanner"
+Status: "draft"
+IncludedAttributes:
+  - Name: Tag ID
+    Condition: "Scanned value"
+  - Name: Flight Number
+    Condition: "Read-only"
+  - Name: Weight
+    Condition: "Read-only"
+AvailableCTAs:
+  - Name: Load Bag
+    Condition: "If flight matches"
+  - Name: Offload Bag
+    Condition: "If authorized"
+AccessRules:
+  - Role: "Baggage Handler"
+    Permission: "Read/Write"

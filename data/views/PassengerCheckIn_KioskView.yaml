@@ -1,0 +1,18 @@
+Description: "Public facing kiosk for self-service check-in."
+Platform: "Kiosk"
+Status: "active"
+IncludedAttributes:
+  - Name: Name
+    Condition: "Always visible"
+  - Name: Surname
+    Condition: "Always visible"
+  - Name: TicketNumber
+    Condition: "Masked (last 4 digits)"
+AvailableCTAs:
+  - Name: Print Boarding Pass
+    Condition: "If check-in complete"
+  - Name: Change Seat
+    Condition: "If flight open"
+AccessRules:
+  - Role: "Passenger"
+    Permission: "Read/Write"

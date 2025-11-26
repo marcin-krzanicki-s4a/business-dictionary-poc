@@ -1,0 +1,17 @@
+Description: A detailed briefing package for the assigned flight crew.
+Platform: Mobile
+Status: "draft"
+IncludedAttributes:
+  - Flight.FlightNumber
+  - Flight.Route
+  - Flight.Aircraft.TailNumber
+  - CrewManifest
+AvailableCTAs:
+  - cta: "Acknowledge Briefing"
+  - cta: "Authorize Flight Plan"
+    condition: "position == 'Captain'"
+  - cta: "Review Flight Plan"
+    condition: "position == 'First Officer' or position == 'Relief Pilot'"
+AccessRules:
+  - userRole: "Pilot"
+  - userRole: "Flight Attendant"

@@ -1,0 +1,10 @@
+id: ATTR-126
+name: QNH
+description: Atmospheric pressure adjusted to sea level.
+dataType: Integer
+source: Inferred
+status: active
+unit: hPa
+minValue: 900
+maxValue: 1100
+example: 1013

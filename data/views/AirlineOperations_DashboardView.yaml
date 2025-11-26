@@ -1,0 +1,18 @@
+Description: "Internal dashboard for airline operations managers."
+Platform: "Desktop Web"
+Status: "draft"
+IncludedAttributes:
+  - Name: Flight Status
+    Condition: "Real-time"
+  - Name: Passenger Counts
+    Condition: "Aggregated"
+  - Name: Delays
+    Condition: "Highlighted if > 15min"
+AvailableCTAs:
+  - Name: Delay Flight
+    Condition: "Manager approval required"
+  - Name: Assign Gate
+    Condition: "If not assigned"
+AccessRules:
+  - Role: "Ops Manager"
+    Permission: "Read/Write"

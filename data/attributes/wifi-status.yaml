@@ -1,0 +1,13 @@
+id: ATTR-024
+name: WiFi Status
+description: Connectivity status for wireless network.
+dataType: Enum
+values:
+  - key: CONNECTED
+    label: "Connected"
+    description: "Active connection available"
+  - key: DISCONNECTED
+    label: "Disconnected"
+    description: "No connection available"
+usedIn:
+  - FLIGHT

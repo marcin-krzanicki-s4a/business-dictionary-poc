@@ -1,0 +1,16 @@
+id: ATTR-005
+name: Fare Class
+description: Passenger service level classification for flight bookings.
+dataType: Enum
+values:
+  - key: ECONOMY
+    label: "Economy"
+    description: "Standard service"
+  - key: BUSINESS
+    label: "Business"
+    description: "Premium cabin service"
+  - key: FIRST
+    label: "First"
+    description: "Ultra-premium service"
+usedIn:
+  - FLIGHT

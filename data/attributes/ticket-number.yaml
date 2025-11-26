@@ -1,0 +1,8 @@
+id: ATTR-018
+name: Ticket Number
+description: Unique identifier for a flight ticket.
+dataType: String
+pattern: "[0-9]{3}-[0-9]{10}"
+example: "014-1234567890"
+usedIn:
+  - PASSENGER

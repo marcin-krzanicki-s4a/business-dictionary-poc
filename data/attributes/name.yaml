@@ -1,0 +1,9 @@
+id: ATTR-122
+name: Name
+description: Attribute representing Name.
+dataType: String
+source: Inferred
+status: active
+minLength: 1
+maxLength: 100
+example: John Doe

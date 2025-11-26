@@ -1,0 +1,32 @@
+Name: AIRLINE
+TermID: AIR-001
+BusinessDefinition: "An organization providing aviation services for passengers and cargo."
+Steward: "Network Planning"
+Status: "active"
+CoreAttributes:
+  - Name: IATA Designator
+    Type: String
+    Source: "IATA"
+    Values: "AC"
+    UpdateFrequency: "Static"
+  - Name: ICAO Indicator
+    Type: String
+    Source: "ICAO"
+    Values: "ACA"
+    UpdateFrequency: "Static"
+CoreRelationships:
+  - object: FLIGHT
+    type: "operates"
+    dependency: "required"
+SystemPerspectives:
+  Route Management:
+    Status: "active"
+    Context: "Network planning and route analysis"
+    PermittedUserGroups: ["Network Planner"]
+    RelevantAttributes:
+      - Name: IATA Designator
+        Type: String
+        Source: "IATA"
+    SystemSpecificCTAs: ["Add Route", "Suspend Route"]
+    ViewsUsed:
+      - ref: "AirlineOperations_DashboardView"

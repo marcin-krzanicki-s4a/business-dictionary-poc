@@ -1,0 +1,10 @@
+id: ATTR-132
+name: Weight
+description: Attribute representing Weight.
+dataType: Decimal
+source: Inferred
+status: active
+unit: kg
+precision: 2
+minValue: 0.0
+example: 23.5

@@ -1,0 +1,10 @@
+id: ATTR-119
+name: ICAO Indicator
+description: Three-letter code assigned by ICAO to the airline.
+dataType: String
+source: Inferred
+status: active
+format: ^[A-Z]{3}$
+minLength: 3
+maxLength: 3
+example: DLH

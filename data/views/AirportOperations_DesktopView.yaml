@@ -1,0 +1,17 @@
+Title: Airport Operations Desktop View
+Description: The main dashboard for ground controllers, showing a real-time overview.
+Platform: Web-Desktop
+Status: "draft"
+IncludedAttributes:
+  - Airport Code (IATA)
+  - Operating Status
+  - Current Weather.Temperature
+  - Congestion Level
+  - Active Runway Configuration.Name
+AvailableCTAs:
+  - Update Operating Status
+  - Assign Gate to Flight
+AccessRules:
+  - userRole: "Dispatcher"
+  - userRole: "Ramp Manager"
+  - userRole: "OPS Manager"

@@ -1,0 +1,8 @@
+id: ATTR-019
+name: Fuel Load
+description: Quantity of fuel on board aircraft.
+dataType: Decimal
+unit: "kg"
+minValue: 0
+usedIn:
+  - FLIGHT

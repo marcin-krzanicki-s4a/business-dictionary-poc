@@ -1,0 +1,59 @@
+Name: PASSENGER
+TermID: PASS-001
+BusinessDefinition: "An individual who travels in an aircraft."
+Steward: "Customer Experience"
+Status: "active"
+CoreAttributes:
+  - Name: Name
+    Type: String
+    Source: "Reservation System"
+    Values: "John"
+    UpdateFrequency: "Static"
+  - Name: Surname
+    Type: String
+    Source: "Reservation System"
+    Values: "Doe"
+    UpdateFrequency: "Static"
+  - Name: TicketNumber
+    Type: String
+    Source: "Ticketing"
+    Values: "014-1234567890"
+    UpdateFrequency: "Static"
+CoreRelationships:
+  - object: FLIGHT
+    type: "booked-on"
+    dependency: "required"
+  - object: AIRLINE
+    type: "customer-of"
+    dependency: "optional"
+SystemPerspectives:
+  Check-in System:
+    Status: "active"
+    Context: "Passenger view during check-in process"
+    PermittedUserGroups: ["Passenger", "Agent"]
+    RelevantAttributes:
+      - Name: Name
+        Type: String
+        Source: "Reservation System"
+      - Name: Surname
+        Type: String
+        Source: "Reservation System"
+      - Name: TicketNumber
+        Type: String
+        Source: "Ticketing"
+    SystemSpecificCTAs: ["Select Seat", "Add Baggage", "Print Boarding Pass"]
+    ViewsUsed:
+      - ref: "PassengerCheckIn_KioskView"
+  Loyalty Program:
+    Status: "draft"
+    Context: "Passenger view of loyalty status and benefits"
+    PermittedUserGroups: ["Passenger"]
+    RelevantAttributes:
+      - Name: Name
+        Type: String
+        Source: "Loyalty System"
+      - Name: Surname
+        Type: String
+        Source: "Loyalty System"
+    SystemSpecificCTAs: ["Redeem Points", "View Tier Benefits"]
+    ViewsUsed: []

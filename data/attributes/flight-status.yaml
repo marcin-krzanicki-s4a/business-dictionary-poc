@@ -1,0 +1,18 @@
+id: ATTR-113
+name: Flight Status
+description: Current operational status of the flight.
+dataType: Enum
+source: Inferred
+status: active
+values:
+- label: Scheduled
+  description: Flight is planned.
+- label: Active
+  description: Flight is currently in the air.
+- label: Landed
+  description: Flight has arrived.
+- label: Cancelled
+  description: Flight has been cancelled.
+- label: Delayed
+  description: Flight is delayed.
+example: Active

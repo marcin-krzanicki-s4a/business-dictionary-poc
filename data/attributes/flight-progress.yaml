@@ -1,0 +1,10 @@
+id: ATTR-020
+name: Flight Progress
+description: Percentage of flight distance completed.
+dataType: Decimal
+unit: "%"
+minValue: 0
+maxValue: 100
+precision: 1
+usedIn:
+  - FLIGHT

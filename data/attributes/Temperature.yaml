@@ -1,0 +1,8 @@
+id: ATTR-011
+name: Temperature
+description: Environmental temperature measurement.
+dataType: Decimal
+unit: "°C"
+precision: 1
+usedIn:
+  - CurrentWeather

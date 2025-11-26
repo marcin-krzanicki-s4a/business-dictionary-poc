@@ -1,0 +1,9 @@
+id: ATTR-127
+name: Surname
+description: Attribute representing Surname.
+dataType: String
+source: Inferred
+status: active
+minLength: 1
+maxLength: 100
+example: John Doe

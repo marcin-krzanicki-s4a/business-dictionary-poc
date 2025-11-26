@@ -1,0 +1,10 @@
+id: ATTR-102
+name: Airport Code (IATA)
+description: Three-letter IATA airport code.
+dataType: String
+source: Inferred
+status: active
+format: ^[A-Z]{3}$
+minLength: 3
+maxLength: 3
+example: LHR

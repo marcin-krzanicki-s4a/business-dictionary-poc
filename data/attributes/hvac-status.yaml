@@ -1,0 +1,6 @@
+id: ATTR-117
+name: HVAC Status
+description: Attribute representing HVAC Status.
+dataType: String
+source: Auto-generated
+status: draft

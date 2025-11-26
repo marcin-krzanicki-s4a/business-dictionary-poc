@@ -1,0 +1,8 @@
+id: ATTR-022
+name: Runway Visual Range
+description: Visibility distance on runway.
+dataType: Distance
+unit: "meters"
+minValue: 0
+usedIn:
+  - AIRPORT

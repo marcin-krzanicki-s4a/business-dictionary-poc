@@ -1,0 +1,9 @@
+id: ATTR-107
+name: Current Weather.Temperature
+description: Attribute representing Current Weather.Temperature.
+dataType: Decimal
+source: Inferred
+status: active
+unit: Celsius
+precision: 1
+example: 21.5

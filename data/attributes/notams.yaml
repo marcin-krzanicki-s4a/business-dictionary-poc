@@ -1,0 +1,6 @@
+id: ATTR-121
+name: NOTAMs
+description: Attribute representing NOTAMs.
+dataType: String
+source: Auto-generated
+status: draft

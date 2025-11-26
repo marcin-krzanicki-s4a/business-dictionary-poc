@@ -1,0 +1,16 @@
+id: ATTR-002
+name: Operating Status
+description: Current operational state of an airport or facility.
+dataType: Enum
+values:
+  - key: OPEN
+    label: "Open"
+    description: "Fully operational"
+  - key: CLOSED
+    label: "Closed"
+    description: "Not operational"
+  - key: RESTRICTED
+    label: "Restricted"
+    description: "Operational with limitations"
+usedIn:
+  - AIRPORT

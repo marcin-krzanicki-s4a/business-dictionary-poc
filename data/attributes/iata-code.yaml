@@ -1,0 +1,11 @@
+id: ATTR-001
+name: IATA Code
+description: Three-letter code designating airports and metropolitan areas.
+dataType: String
+format: "^[A-Z]{3}$"
+minLength: 3
+maxLength: 3
+example: "JFK"
+usedIn:
+  - AIRPORT
+  - AIRLINE

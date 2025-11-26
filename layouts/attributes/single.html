@@ -1,0 +1,347 @@
+{{ define "main" }}
+{{ $attributeID := .File.BaseFileName }}
+{{ $attributeData := index site.Data.attributes $attributeID }}
+
+{{ if $attributeData }}
+<!-- Header Section -->
+<div class="uk-section uk-section-xsmall uk-padding-remove-bottom">
+    <div class="uk-container">
+
+        <!-- Breadcrumbs -->
+        <ul class="uk-breadcrumb uk-margin-small-bottom">
+            <li><a href="{{ site.Home.RelPermalink }}">Home</a></li>
+            <li><a href="{{ `attributes` | relURL }}">Attributes</a></li>
+            <!-- <li><span>{{ $attributeData.name }}</span></li> -->
+        </ul>
+
+        <div class="uk-flex uk-flex-middle uk-margin-medium-bottom">
+            <h1 class="uk-heading-small uk-margin-remove-bottom uk-margin-right">{{ $attributeData.name }}</h1>
+            <span class="uk-badge uk-padding-small" style="background-color: var(--s4a-light-violet);">{{
+                $attributeData.dataType }}</span>
+        </div>
+
+        <p class="uk-text-lead uk-text-muted uk-margin-remove-top uk-margin-medium-bottom">
+            Category: Global Attribute | ID: {{ $attributeData.id }}
+            {{ if $attributeData.unit }} | Unit: {{ $attributeData.unit }}{{ end }}
+        </p>
+    </div>
+</div>
+
+<!-- Content Grid Section -->
+<div class="uk-section uk-section-default uk-padding-small">
+    <div class="uk-container">
+
+        <div class="uk-grid-medium" uk-grid>
+
+            <!-- Main Column -->
+            <div class="uk-width-1-1">
+
+                <!-- General Information (Description + Definition) -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3 uk-text-primary-red">General Information</h2>
+
+                    <!-- Description -->
+                    {{ if $attributeData.description }}
+                    <div class="uk-text-lead uk-margin-medium-bottom">{{ $attributeData.description }}</div>
+                    {{ end }}
+
+                    <hr class="uk-divider-icon">
+
+                    <!-- Definition Grid -->
+                    <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Data Type</h4>
+                            <p class="uk-margin-small-top"><strong>{{ $attributeData.dataType }}</strong></p>
+                        </div>
+
+                        {{ if $attributeData.format }}
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Format</h4>
+                            <p class="uk-margin-small-top"><code
+                                    style="background-color: #f5f5f5; padding: 4px 8px; border-radius: 4px;">{{ $attributeData.format }}</code>
+                            </p>
+                        </div>
+                        {{ end }}
+
+                        {{ if $attributeData.pattern }}
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Pattern</h4>
+                            <p class="uk-margin-small-top"><code
+                                    style="background-color: #f5f5f5; padding: 4px 8px; border-radius: 4px;">{{ $attributeData.pattern }}</code>
+                            </p>
+                        </div>
+                        {{ end }}
+
+                        {{ if $attributeData.example }}
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Example</h4>
+                            <p class="uk-margin-small-top"><code
+                                    style="background-color: #f5f5f5; padding: 4px 8px; border-radius: 4px;">{{ $attributeData.example }}</code>
+                            </p>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+
+                <!-- Constraints & Validation -->
+                {{ if or $attributeData.minValue $attributeData.maxValue $attributeData.minLength
+                $attributeData.maxLength $attributeData.precision $attributeData.unit }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Constraints & Validation</h2>
+                    <div class="uk-overflow-auto">
+                        <table
+                            class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-responsive uk-margin-top">
+                            <thead>
+                                <tr>
+                                    <th class="uk-width-medium">Constraint</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ if or $attributeData.minValue (eq $attributeData.minValue 0) }}
+                                <tr>
+                                    <td><strong>Min Value</strong></td>
+                                    <td>{{ $attributeData.minValue }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if or $attributeData.maxValue (eq $attributeData.maxValue 0) }}
+                                <tr>
+                                    <td><strong>Max Value</strong></td>
+                                    <td>{{ $attributeData.maxValue }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if or $attributeData.minLength (eq $attributeData.minLength 0) }}
+                                <tr>
+                                    <td><strong>Min Length</strong></td>
+                                    <td>{{ $attributeData.minLength }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if or $attributeData.maxLength (eq $attributeData.maxLength 0) }}
+                                <tr>
+                                    <td><strong>Max Length</strong></td>
+                                    <td>{{ $attributeData.maxLength }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if or $attributeData.precision (eq $attributeData.precision 0) }}
+                                <tr>
+                                    <td><strong>Precision</strong></td>
+                                    <td>{{ $attributeData.precision }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if $attributeData.unit }}
+                                <tr>
+                                    <td><strong>Unit</strong></td>
+                                    <td>{{ $attributeData.unit }}</td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{ end }}
+
+                <!-- Enumeration Values -->
+                {{ if $attributeData.values }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Allowed Values</h2>
+                    <div class="uk-overflow-auto">
+                        <table
+                            class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-responsive uk-margin-top">
+                            <thead>
+                                <tr>
+                                    <th class="uk-width-small">Key</th>
+                                    <th class="uk-width-medium">Label</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $attributeData.values }}
+                                <tr>
+                                    <td><code>{{ .key }}</code></td>
+                                    <td><strong>{{ .label }}</strong></td>
+                                    <td>{{ .description }}</td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{ end }}
+
+                <!-- Data Origin & Quality (Simulated) -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Origin & Quality</h2>
+                    <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Source System</h4>
+                            <p class="uk-margin-small-top">
+                                <span uk-icon="icon: server; ratio: 0.8" class="uk-margin-small-right"></span>
+                                <strong>{{ .Params.sourceSystem }}</strong>
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Source Type</h4>
+                            <p class="uk-margin-small-top">
+                                <span class="uk-label" style="background-color: {{ if eq .Params.sourceType " Internal"
+                                    }}var(--s4a-dark-violet){{ else }}#666{{ end }};">
+                                    {{ .Params.sourceType }}
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Source Entity</h4>
+                            <p class="uk-margin-small-top">
+                                <span uk-icon="icon: database; ratio: 0.8" class="uk-margin-small-right"></span>
+                                <code>{{ .Params.sourceEntity }}</code>
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="uk-text-muted uk-margin-remove-bottom">Refresh Rate</h4>
+                            <p class="uk-margin-small-top">
+                                <span uk-icon="icon: history; ratio: 0.8" class="uk-margin-small-right"></span>
+                                {{ .Params.refreshRate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Used In Section (Dynamic) -->
+                {{ $currentAttrName := $attributeData.name }}
+                {{ $usedIn := slice }}
+
+                <!-- Scan Objects -->
+                {{ range $objID, $objData := site.Data.objects }}
+                {{ if $objData.CoreAttributes }}
+                {{ range $objData.CoreAttributes }}
+                {{ if eq (lower .Name) (lower $currentAttrName) }}
+                {{ $usedIn = $usedIn | append (dict "name" $objData.Name "type" "Business Object" "link" (printf
+                "/objects/%s/" (lower $objID)) "icon" "file-text" "color" "var(--s4a-red)") }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+
+                <!-- Scan Perspectives within Objects -->
+                {{ if $objData.SystemPerspectives }}
+                {{ range $perspID, $perspData := $objData.SystemPerspectives }}
+                {{ if $perspData.RelevantAttributes }}
+                {{ range $perspData.RelevantAttributes }}
+                {{ if eq (lower .Name) (lower $currentAttrName) }}
+                {{ $usedIn = $usedIn | append (dict "name" $perspID "type" "Perspective" "link" (printf
+                "/perspectives/%s/" (urlize $perspID)) "icon" "album" "color" "var(--s4a-light-violet)") }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+
+                <!-- Scan Views -->
+                {{ range $viewID, $viewData := site.Data.views }}
+                {{ if $viewData.IncludedAttributes }}
+                {{ range $viewData.IncludedAttributes }}
+                {{ $attrName := "" }}
+                {{ if reflect.IsMap . }}
+                {{ $attrName = .Name }}
+                {{ else }}
+                {{ $attrName = . }}
+                {{ end }}
+
+                {{ if eq (lower $attrName) (lower $currentAttrName) }}
+                {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
+                {{ $viewTitle := $viewID }}
+                {{ if $viewPage }}
+                {{ $viewTitle = $viewPage.Title }}
+                {{ end }}
+                {{ $usedIn = $usedIn | append (dict "name" $viewTitle "type" "UI View" "link" (printf "/views/%s/"
+                $viewID) "icon" "laptop" "color" "var(--s4a-dark-violet)") }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+
+                <!-- Usage References -->
+                {{ if gt (len $usedIn) 0 }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Usage References</h2>
+                    <p class="uk-text-small uk-text-muted">This attribute is referenced in the following contexts:</p>
+                    <ul class="uk-list uk-list-divider uk-text-small">
+                        {{ range $usedIn }}
+                        <li>
+                            <a href="{{ .link }}" class="uk-link-toggle uk-flex uk-flex-middle">
+                                <span class="uk-margin-small-right" uk-icon="icon: {{ .icon }}"
+                                    style="color: {{ .color | safeCSS }};"></span>
+                                <div>
+                                    <div class="uk-text-bold">{{ .name }}</div>
+                                    <div class="uk-text-meta" style="font-size: 0.8em;">{{ .type }}</div>
+                                </div>
+                            </a>
+                        </li>
+                        {{ end }}
+                    </ul>
+                </div>
+
+                <!-- Data Lineage Visualization -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
+                    <div class="mermaid">
+                        graph LR
+                        {{ $safeName := $attributeData.name | replaceRE "[()]" "" }}
+                        root["{{ $safeName }}"]
+                        style root fill:#f5f5f5,stroke:#666,stroke-width:2px,color:#333
+
+                        {{ if .Params.sourceSystem }}
+                        source[("{{ .Params.sourceSystem }}")]
+                        style source fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+                        source -.-> root
+                        {{ end }}
+
+                        {{ range $index, $item := $usedIn }}
+                        {{ $itemName := $item.name | default "Unnamed Node" }}
+                        {{ $safeItemName := $itemName | replaceRE "[()]" "" }}
+                        node{{ $index }}["{{ $safeItemName }}"]
+                        root -.-> node{{ $index }}
+
+                        {{ if eq $item.type "Business Object" }}
+                        style node{{ $index }} fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
+                        {{ else if eq $item.type "Perspective" }}
+                        style node{{ $index }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
+                        {{ else if eq $item.type "UI View" }}
+                        style node{{ $index }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
+                        {{ end }}
+
+                        click node{{ $index }} "{{ $item.link }}"
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Mermaid JS for Lineage Graph -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        securityLevel: 'loose',
+        flowchart: { curve: 'basis' }
+    });
+</script>
+{{ else }}
+<!-- Error message if attribute data not found -->
+<div class="uk-section">
+    <div class="uk-container">
+        <div class="uk-alert uk-alert-danger">
+            <h3>Attribute Not Found</h3>
+            <p>The requested attribute could not be loaded from the data registry.</p>
+            <p><a href="{{ `attributes` | relURL }}">← Back to Attributes</a></p>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ end }}

@@ -1,0 +1,6 @@
+id: ATTR-116
+name: Flight.Route
+description: Attribute representing Flight.Route.
+dataType: String
+source: Auto-generated
+status: draft

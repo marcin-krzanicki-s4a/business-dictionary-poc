@@ -1,0 +1,8 @@
+id: ATTR-025
+name: Time to Destination
+description: Remaining flight time.
+dataType: Duration
+unit: "minutes"
+minValue: 0
+usedIn:
+  - FLIGHT

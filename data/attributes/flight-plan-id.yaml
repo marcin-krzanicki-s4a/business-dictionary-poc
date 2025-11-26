@@ -1,0 +1,9 @@
+id: ATTR-112
+name: Flight Plan ID
+description: Attribute representing Flight Plan ID.
+dataType: String
+source: Inferred
+status: active
+minLength: 1
+maxLength: 50
+example: ID-12345

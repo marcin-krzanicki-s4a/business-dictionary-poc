@@ -1,0 +1,60 @@
+[
+{{- range $i, $page := .Site.RegularPages -}}
+  {{- $status := "active" -}}
+  {{- if $page.Params.status -}}
+    {{- $status = $page.Params.status -}}
+  {{- end -}}
+  
+  {{- $category := "Unknown" -}}
+  {{- $extraData := "" -}}
+  
+  {{- if eq $page.Section "objects" -}}
+    {{- $category = "Business Object" -}}
+    {{- $objectData := index $.Site.Data.objects $page.Title -}}
+    {{- if not $objectData -}}
+      {{- $objectData = index $.Site.Data.objects (lower $page.Title) -}}
+    {{- end -}}
+    
+    {{- with $objectData -}}
+      {{- $extraData = print $extraData " " .Steward " " .BusinessDefinition -}}
+      {{- range .CoreAttributes -}}
+        {{- $extraData = print $extraData " " .Name " " .Source " " .Type -}}
+      {{- end -}}
+      {{- range .CoreRelationships -}}
+        {{- $extraData = print $extraData " " .object " " .type -}}
+      {{- end -}}
+      {{- range $key, $value := .SystemPerspectives -}}
+        {{- $extraData = print $extraData " " $key " " $value.Context -}}
+        {{- range $value.RelevantAttributes -}}
+          {{- $extraData = print $extraData " " .Name -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else if eq $page.Section "views" -}}
+    {{- $category = "UI View" -}}
+    {{- $extraData = print $page.Summary " " $page.Content -}}
+  {{- else if eq $page.Section "perspectives" -}}
+    {{- $category = "Perspective" -}}
+    {{- $extraData = print $page.Summary " " $page.Content -}}
+  {{- else if eq $page.Section "attributes" -}}
+    {{- $category = "Global Attribute" -}}
+    {{- $attributeID := $page.File.BaseFileName -}}
+    {{- $attributeData := index $.Site.Data.attributes $attributeID -}}
+    {{- if $attributeData -}}
+      {{- $extraData = print $attributeData.name " " $attributeData.description " " $attributeData.dataType " " $attributeData.unit -}}
+      {{- range $attributeData.values -}}
+        {{- $extraData = print $extraData " " .label " " .description -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {
+    "title": {{ $page.Title | jsonify }},
+    "permalink": {{ $page.RelPermalink | jsonify }},
+    "section": {{ $page.Section | jsonify }},
+    "status": {{ $status | jsonify }},
+    "category": {{ $category | jsonify }},
+    "content": {{ (print $page.Plain " " $extraData) | jsonify }}
+  }{{- if ne $i (sub (len $.Site.RegularPages) 1) }},{{ end }}
+{{- end -}}
+]

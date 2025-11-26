@@ -1,0 +1,8 @@
+id: ATTR-125
+name: Passenger Counts
+description: Attribute representing Passenger Counts.
+dataType: Integer
+source: Inferred
+status: active
+minValue: 0
+example: 150

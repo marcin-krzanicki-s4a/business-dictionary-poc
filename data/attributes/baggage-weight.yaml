@@ -1,0 +1,9 @@
+id: ATTR-017
+name: Baggage Weight
+description: Total weight of baggage.
+dataType: Decimal
+unit: "kg"
+minValue: 0
+usedIn:
+  - FLIGHT
+  - PASSENGER

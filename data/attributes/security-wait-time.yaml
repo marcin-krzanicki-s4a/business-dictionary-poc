@@ -1,0 +1,8 @@
+id: ATTR-021
+name: Security Wait Time
+description: Estimated time to pass through security checkpoint.
+dataType: Duration
+unit: "minutes"
+minValue: 0
+usedIn:
+  - AIRPORT

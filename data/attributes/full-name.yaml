@@ -1,0 +1,8 @@
+id: ATTR-008
+name: Full Name
+description: Complete name of an entity (airport, person, etc.).
+dataType: String
+maxLength: 255
+usedIn:
+  - AIRPORT
+  - AIRLINE

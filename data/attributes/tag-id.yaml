@@ -1,0 +1,9 @@
+id: ATTR-128
+name: Tag ID
+description: Attribute representing Tag ID.
+dataType: String
+source: Inferred
+status: active
+minLength: 1
+maxLength: 50
+example: ID-12345

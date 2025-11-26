@@ -1,0 +1,289 @@
+{{ define "main" }}
+{{ $viewID := .File.BaseFileName }}
+{{ $viewData := index site.Data.views $viewID }}
+
+{{ if $viewData }}
+<!-- Header Section -->
+<div class="uk-section uk-section-xsmall uk-padding-remove-bottom">
+    <div class="uk-container">
+
+        <!-- Breadcrumbs -->
+        <ul class="uk-breadcrumb uk-margin-small-bottom">
+            <li><a href="{{ site.Home.RelPermalink }}">Home</a></li>
+            <li><a href="{{ `views` | relURL }}">Views</a></li>
+            <!-- <li class="uk-disabled"><span>{{ .Title }}</span></li> -->
+        </ul>
+
+        <div class="uk-flex uk-flex-middle uk-margin-medium-bottom">
+            <h1 class="uk-heading-medium uk-margin-remove-bottom uk-margin-right">{{ .Title }}</h1>
+            {{ $status := $viewData.Status | default "Draft" }}
+            <span class="uk-badge uk-padding-small"
+                style="{{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ end }}">{{
+                $status }}</span>
+        </div>
+
+        <p class="uk-text-lead uk-text-muted uk-margin-remove-top uk-margin-medium-bottom">
+            Category: UI View | Platform: {{ $viewData.Platform }}
+        </p>
+    </div>
+</div>
+
+<!-- Content Grid Section -->
+<div class="uk-section uk-section-default uk-padding-small">
+    <div class="uk-container">
+
+        <div class="uk-grid-medium" uk-grid>
+
+            <!-- Main Column -->
+            <div class="uk-width-1-1">
+
+                <!-- Description -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3 uk-text-primary-red">Description</h2>
+                    <div class="uk-text-lead">{{ $viewData.Description }}</div>
+                </div>
+
+                <!-- Permissions / Access Rules -->
+                {{ if $viewData.AccessRules }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Permissions</h2>
+
+                    <!-- Role/User Type Filter -->
+                    <div class="uk-margin-bottom">
+                        <p class="uk-text-small uk-text-muted uk-margin-small-bottom">Select a role to see what this
+                            user can do:</p>
+                        <div class="uk-flex uk-flex-wrap uk-flex-gap">
+                            <button class="uk-button uk-button-small role-filter-btn role-filter-all" data-role="all">
+                                All Roles
+                            </button>
+                            {{ range $viewData.AccessRules }}
+                            {{ if reflect.IsMap . }}
+                            <button class="uk-button uk-button-small role-filter-btn"
+                                data-role="{{ .Role | default .userRole }}">
+                                {{ .Role | default .userRole }}
+                            </button>
+                            {{ else }}
+                            <button class="uk-button uk-button-small role-filter-btn" data-role="{{ . }}">
+                                {{ . }}
+                            </button>
+                            {{ end }}
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    <!-- Permissions Table -->
+                    <table class="uk-table uk-table-striped uk-table-small">
+                        <thead>
+                            <tr>
+                                <th>Role / User Type</th>
+                                <th>Permission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range $viewData.AccessRules }}
+                            <tr>
+                                <td>
+                                    {{ if reflect.IsMap . }}
+                                    <strong>{{ .Role | default .userRole }}</strong>
+                                    {{ else }}
+                                    <strong>{{ . }}</strong>
+                                    {{ end }}
+                                </td>
+                                <td>
+                                    {{ if reflect.IsMap . }}
+                                    {{ if .Permission }}
+                                    <span class="uk-badge" style="background-color: var(--s4a-red);">{{ .Permission
+                                        }}</span>
+                                    {{ else }}
+                                    <span class="uk-badge" style="background-color: #059669;">Read</span>
+                                    {{ end }}
+                                    {{ else }}
+                                    <span class="uk-badge" style="background-color: #059669;">Read</span>
+                                    {{ end }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                {{ end }}
+                {{ if $viewData.IncludedAttributes }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Included Attributes</h2>
+                    <p class="uk-text-small uk-text-muted uk-margin-small-bottom" id="attributes-info">Showing
+                        attributes for all roles</p>
+                    <table class="uk-table uk-table-striped uk-table-small">
+                        <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Condition / Visible to</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attributes-tbody">
+                            {{ range $viewData.IncludedAttributes }}
+                            <tr class="attribute-row"
+                                data-condition="{{ if reflect.IsMap . }}{{ .condition | default "" }}{{ end }}">
+                                <td>
+                                    {{ $attrName := "" }}
+                                    {{ if reflect.IsMap . }}
+                                    {{ $attrName = .Name }}
+                                    {{ else }}
+                                    {{ $attrName = . }}
+                                    {{ end }}
+
+                                    {{ $attrLink := "" }}
+                                    {{ range $id, $data := site.Data.attributes }}
+                                    {{ if eq (lower $data.name) (lower $attrName) }}
+                                    {{ $attrLink = printf "attributes/%s" $id | relURL }}
+                                    {{ end }}
+                                    {{ end }}
+
+                                    {{ if $attrLink }}
+                                    <a href="{{ $attrLink }}" class="uk-link-text"
+                                        style="text-decoration: underline;"><strong>{{ $attrName }}</strong></a>
+                                    {{ else }}
+                                    <strong>{{ $attrName }}</strong>
+                                    {{ end }}
+                                </td>
+                                <td>
+                                    {{ if reflect.IsMap . }}
+                                    {{ if .condition }}
+                                    <code>{{ .condition }}</code>
+                                    {{ else }}
+                                    <span class="uk-text-muted">All roles</span>
+                                    {{ end }}
+                                    {{ else }}
+                                    <span class="uk-text-muted">All roles</span>
+                                    {{ end }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                {{ end }}
+
+                <!-- Available CTAs -->
+                {{ if $viewData.AvailableCTAs }}
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Available Actions</h2>
+                    <p class="uk-text-small uk-text-muted uk-margin-small-bottom" id="actions-info">Showing actions for
+                        all roles</p>
+                    <table class="uk-table uk-table-striped uk-table-small">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Condition / Available to</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actions-tbody">
+                            {{ range $viewData.AvailableCTAs }}
+                            <tr class="action-row"
+                                data-condition="{{ if reflect.IsMap . }}{{ .condition | default "" }}{{ end }}">
+                                <td>
+                                    {{ if reflect.IsMap . }}
+                                    <strong>{{ .Name | default .cta }}</strong>
+                                    {{ else }}
+                                    <strong>{{ . }}</strong>
+                                    {{ end }}
+                                </td>
+                                <td>
+                                    {{ if reflect.IsMap . }}
+                                    {{ if .condition }}
+                                    <code>{{ .condition }}</code>
+                                    {{ else }}
+                                    <span class="uk-text-muted">All roles</span>
+                                    {{ end }}
+                                    {{ else }}
+                                    <span class="uk-text-muted">All roles</span>
+                                    {{ end }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                {{ end }}
+
+                <!-- Data Lineage Map -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
+                    <div class="mermaid">
+                        graph LR
+                        {{ $safeViewName := .Title | replaceRE "[^a-zA-Z0-9]" "" }}
+                        view["{{ .Title }}"]
+                        style view fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:2px
+
+                        %% Upstream Attributes (Sample)
+                        {{ if $viewData.IncludedAttributes }}
+                        subgraph Data Elements
+                        direction TB
+                        {{ range first 5 $viewData.IncludedAttributes }}
+                        {{ $attrName := "" }}
+                        {{ if reflect.IsMap . }}{{ $attrName = .Name }}{{ else }}{{ $attrName = . }}{{ end }}
+                        {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
+                        attr_{{ $safeAttrName }}["{{ $attrName }}"]
+                        style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
+                        attr_{{ $safeAttrName }} -.-> view
+                        {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
+                        {{ if $attrPage }}
+                        click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
+                        {{ end }}
+                        {{ end }}
+                        {{ if gt (len $viewData.IncludedAttributes) 5 }}
+                        more_attr["...and {{ sub (len $viewData.IncludedAttributes) 5 }} more"]
+                        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
+                        more_attr -.-> view
+                        {{ end }}
+                        end
+                        {{ end }}
+
+                        %% Downstream Roles
+                        {{ if $viewData.AccessRules }}
+                        {{ range $viewData.AccessRules }}
+                        {{ $roleName := "" }}
+                        {{ if reflect.IsMap . }}{{ $roleName = .Role | default .userRole }}{{ else }}{{ $roleName = .
+                        }}{{ end }}
+                        {{ $safeRoleName := $roleName | replaceRE "[^a-zA-Z0-9]" "" }}
+                        role_{{ $safeRoleName }}("{{ $roleName }}")
+                        style role_{{ $safeRoleName }} fill:#e0f2f1,stroke:#00695c,color:#00695c,stroke-width:1px
+                        view -.-> role_{{ $safeRoleName }}
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+
+                <script type="module">
+                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+                    mermaid.initialize({
+                        startOnLoad: true,
+                        theme: 'neutral',
+                        securityLevel: 'loose',
+                        flowchart: { curve: 'basis' }
+                    });
+                </script>
+
+                <!-- UI View Mockup -->
+                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">UI View Mockup</h2>
+                    <div class="uk-placeholder uk-text-center">
+                        <span uk-icon="icon: image; ratio: 2"></span>
+                        <p class="uk-text-muted">Mockup or screenshot of <strong>{{ .Title }}</strong> would appear
+                            here.</p>
+                    </div>
+                    <div class="uk-margin-top">
+                        <button class="uk-button uk-button-primary">View in Figma <span
+                                uk-icon="icon: arrow-right"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ else }}
+    <div class="uk-container uk-margin-large-top">
+        <div class="uk-alert-danger" uk-alert>
+            <p>Data for view <strong>{{ $viewID }}</strong> not found.</p>
+        </div>
+    </div>
+    {{ end }}
+    {{ end }}

@@ -1,0 +1,135 @@
+TermID: AIRPORT-001
+Name: AIRPORT
+Steward: Director of Ground Operations
+Status: active
+BusinessDefinition: |
+  A designated location equipped with runways, terminals, and facilities for
+  aircraft to take off, land, and for passengers and cargo to be processed.
+
+CoreAttributes:
+  - Name: Airport Code (IATA)
+    Type: String
+    Source: IATA Registry
+    APICall: GET /ref/airports/{code}
+  - Name: Full Name
+    Type: String
+    Source: Internal DB
+  - Name: Location
+    Type: GeoPoint
+    Source: Internal DB
+  - Name: Timezone
+    Type: String
+    Source: IANA Timezone DB
+  - Name: Operating Status
+    Type: Enum
+    Values: [Open, Closed, Restricted]
+    Source: Ops System
+    APICall: GET /ops/status/{airport}
+
+CoreRelationships:
+  - type: has-many
+    object: FLIGHT
+    dependency: optional
+  - type: has-many
+    object: RUNWAY
+    dependency: required
+  - type: has-many
+    object: GATE
+    dependency: required
+  - type: has-many (transient)
+    object: AIRCRAFT
+    dependency: optional
+
+SystemPerspectives:
+  "Ground Operations Dashboard":
+    Status: "active"
+    Context: Used by operational staff for real-time airport management.
+    PermittedUserGroups:
+      - Operations
+      - Under The Wing
+      - System administrators
+    RelevantAttributes:
+      - Name: Current Weather
+        Type: Object
+        Ref: WEATHER_REPORT
+        Source: WeatherAPI
+        UpdateFrequency: 15min
+      - Name: Congestion Level
+        Type: Enum
+        Values: [Low, Medium, High, Critical]
+        Source: Calculated
+        Logic: "Based on active flights vs capacity"
+      - Name: Active Runway Configuration
+        Type: Object
+        Ref: RUNWAY_CONFIGURATION
+        Source: Tower Ops
+    SystemSpecificCTAs:
+      - Update Operating Status
+      - Assign Gate to Flight
+      - Activate De-icing Protocol
+      - Generate Operations Report
+    ViewsUsed:
+      - ref: AirportOperations_DesktopView
+      - ref: AirportStatusBadge_HeaderView
+
+  "Passenger Mobile App":
+    Status: "active"
+    Context: Used by passengers to navigate the airport and check flight status.
+    PermittedUserGroups:
+      - Passengers
+      - Public
+    RelevantAttributes:
+      - Name: Security Wait Time
+        Type: Duration
+        Source: Crowd Sensors
+        UpdateFrequency: 5min
+      - Name: Distance to Gate
+        Type: Distance
+        Source: Indoor Maps
+        Logic: "Calculated from current user location"
+      - Name: Nearest Lounge
+        Type: Object
+        Ref: LOUNGE
+    SystemSpecificCTAs:
+      - Navigate to Gate
+      - Book Lounge Access
+      - Order Food for Pickup
+
+  "Facility Management System":
+    Status: "draft"
+    Context: Used by maintenance crews to manage airport infrastructure.
+    PermittedUserGroups:
+      - Maintenance
+      - Contractors
+    RelevantAttributes:
+      - Name: HVAC Status
+        Type: Enum
+        Values: [Optimal, Warning, Critical]
+        Source: IoT Hub
+      - Name: Cleaning Schedule
+        Type: Schedule
+        Source: FM DB
+    SystemSpecificCTAs:
+      - Report Issue
+      - Mark Cleaning Complete
+      - Request Part Replacement
+
+  "Air Traffic Control Tower":
+    Status: "active"
+    Context: Used by ATC controllers to manage airspace and runway usage.
+    PermittedUserGroups:
+      - ATC Controllers
+    RelevantAttributes:
+      - Name: Runway Visual Range
+        Type: Distance
+        Source: Weather Sensors
+      - Name: Wind Speed
+        Type: Speed
+        Source: Weather Sensors
+      - Name: QNH
+        Type: Pressure
+        Source: Weather Sensors
+    SystemSpecificCTAs:
+      - Close Runway
+      - Change Active Configuration
+      - Issue Takeoff Clearance

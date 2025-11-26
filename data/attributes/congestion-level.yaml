@@ -1,0 +1,19 @@
+id: ATTR-013
+name: Congestion Level
+description: Airport or system traffic intensity classification.
+dataType: Enum
+values:
+  - key: LOW
+    label: "Low"
+    description: "Light traffic"
+  - key: MEDIUM
+    label: "Medium"
+    description: "Moderate traffic"
+  - key: HIGH
+    label: "High"
+    description: "Heavy traffic"
+  - key: CRITICAL
+    label: "Critical"
+    description: "System at capacity"
+usedIn:
+  - AIRPORT

@@ -1,0 +1,6 @@
+id: ATTR-114
+name: Flight.Aircraft.TailNumber
+description: Attribute representing Flight.Aircraft.TailNumber.
+dataType: String
+source: Auto-generated
+status: draft

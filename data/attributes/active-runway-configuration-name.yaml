@@ -1,0 +1,9 @@
+id: ATTR-101
+name: Active Runway Configuration.Name
+description: Attribute representing Active Runway Configuration.Name.
+dataType: String
+source: Inferred
+status: active
+minLength: 1
+maxLength: 100
+example: John Doe

@@ -1,0 +1,6 @@
+id: ATTR-009
+name: Location
+description: Geographic coordinates or address.
+dataType: GeoPoint
+usedIn:
+  - AIRPORT

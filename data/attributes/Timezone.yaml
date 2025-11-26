@@ -1,0 +1,8 @@
+id: ATTR-010
+name: Timezone
+description: IANA timezone identifier for time-based operations.
+dataType: String
+pattern: "^[A-Za-z_]+/[A-Za-z_]+$"
+example: "America/New_York"
+usedIn:
+  - AIRPORT

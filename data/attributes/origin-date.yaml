@@ -1,0 +1,8 @@
+id: ATTR-124
+name: Origin Date
+description: Timestamp in UTC.
+dataType: DateTime
+source: Inferred
+status: active
+format: ISO 8601
+example: '2023-10-25T14:30:00Z'

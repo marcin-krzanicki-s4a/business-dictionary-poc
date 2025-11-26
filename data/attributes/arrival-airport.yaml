@@ -1,0 +1,6 @@
+id: ATTR-103
+name: Arrival Airport
+description: Attribute representing Arrival Airport.
+dataType: String
+source: Auto-generated
+status: draft

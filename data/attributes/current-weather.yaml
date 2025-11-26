@@ -1,0 +1,6 @@
+id: ATTR-106
+name: Current Weather
+description: Attribute representing Current Weather.
+dataType: String
+source: Auto-generated
+status: draft

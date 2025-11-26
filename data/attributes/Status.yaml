@@ -1,0 +1,18 @@
+id: ATTR-004
+name: Status
+description: General status indicator for entities (e.g., Active, Draft, Deprecated).
+dataType: Enum
+values:
+  - key: ACTIVE
+    label: "Active"
+    description: "Currently in use"
+  - key: DRAFT
+    label: "Draft"
+    description: "Work in progress"
+  - key: DEPRECATED
+    label: "Deprecated"
+    description: "No longer recommended"
+usedIn:
+  - AIRLINE
+  - PASSENGER
+  - FLIGHT

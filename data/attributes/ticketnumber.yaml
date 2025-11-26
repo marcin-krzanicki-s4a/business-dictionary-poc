@@ -1,0 +1,10 @@
+id: ATTR-129
+name: TicketNumber
+description: 13-digit unique ticket number.
+dataType: String
+source: Inferred
+status: active
+format: ^[0-9]{13}$
+minLength: 13
+maxLength: 13
+example: '1762345678901'

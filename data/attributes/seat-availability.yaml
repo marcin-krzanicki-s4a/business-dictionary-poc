@@ -1,0 +1,7 @@
+id: ATTR-007
+name: Seat Availability
+description: Number of available seats in a given fare class.
+dataType: Integer
+minValue: 0
+usedIn:
+  - FLIGHT

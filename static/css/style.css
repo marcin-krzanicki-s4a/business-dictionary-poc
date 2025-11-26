@@ -1,0 +1,383 @@
+/* S4A Business Dictionary Design System */
+
+:root {
+    --s4a-red: #EB0045;
+    --s4a-dark-violet: #201747;
+    --s4a-light-violet: #31006F;
+    --uk-global-font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--uk-global-font-family);
+}
+
+/* Navigation & Header */
+.uk-navbar-container {
+    background-color: var(--s4a-dark-violet) !important;
+}
+
+.uk-navbar-left a.uk-logo,
+.uk-navbar-left a.uk-logo .uk-text-meta,
+.uk-navbar-nav a {
+    color: #FFFFFF !important;
+    opacity: 1.0;
+}
+
+.uk-navbar-nav>.uk-active>a {
+    color: var(--s4a-red) !important;
+}
+
+/* Typography & Colors */
+.uk-text-primary-red {
+    color: var(--s4a-red) !important;
+}
+
+.uk-heading-large {
+    color: var(--s4a-dark-violet);
+    font-weight: 700;
+}
+
+/* Buttons & Badges */
+.uk-button-primary {
+    background-color: var(--s4a-red) !important;
+    color: white;
+    border: none;
+}
+
+.uk-badge {
+    background-color: var(--s4a-red);
+}
+
+/* Cards */
+.uk-card-shadow {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.uk-card-default {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.uk-card-default:hover {
+    box-shadow: 0 8px 25px rgba(32, 23, 71, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease-in-out;
+}
+
+.content-card {
+    border-radius: 8px;
+}
+
+/* Status Badges */
+.status-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--s4a-red);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 10;
+}
+
+.status-badge.draft {
+    background-color: var(--s4a-light-violet);
+}
+
+.status-badge.deprecated {
+    background-color: #888;
+}
+
+/* Card with badge - ensure spacing between badge and title */
+.uk-card-with-badge .uk-card-body {
+    padding-top: 50px;
+    /* Space for badge */
+}
+
+.uk-card-with-badge .uk-card-title {
+    margin-top: 8px;
+    /* Additional spacing below badge */
+}
+
+/* Card Badge Spacing Fix */
+.uk-card-with-badge .uk-card-body>.uk-text-small.uk-text-muted:first-child {
+    margin-top: 25px;
+    display: block;
+}
+
+/* Tables */
+.uk-table th {
+    background-color: #f0f0f5;
+    color: var(--s4a-light-violet);
+    font-weight: 600;
+}
+
+/* UI Mockup Placeholder */
+.ui-mockup-placeholder {
+    min-height: 400px;
+    background-color: #f7f7f7;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #888;
+}
+
+/* Hero Section (Landing) */
+.hero-section {
+    background: linear-gradient(135deg, var(--s4a-dark-violet) 0%, var(--s4a-light-violet) 100%);
+    padding-top: 80px;
+    padding-bottom: 80px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 60px;
+}
+
+.hero-section,
+.hero-section h1,
+.hero-section p,
+.hero-section .uk-text-muted {
+    color: #FFFFFF !important;
+}
+
+.uk-text-light-accent {
+    color: #F0F0F0 !important;
+}
+
+.uk-search-default .uk-search-input {
+    border-radius: 50px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.3s;
+}
+
+.uk-search-default .uk-search-input:focus {
+    border: 2px solid var(--s4a-red);
+    box-shadow: 0 0 15px rgba(235, 0, 69, 0.5);
+}
+
+.quick-access-icon {
+    color: var(--s4a-red);
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* Sticky Footer */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+    background-color: #f8f8f8;
+}
+
+footer,
+.uk-section-xsmall {
+    flex-shrink: 0;
+}
+
+/* Custom Tooltip Styling */
+.uk-tooltip {
+    background-color: var(--s4a-dark-violet) !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    font-size: 0.875rem !important;
+    box-shadow: 0 4px 12px rgba(32, 23, 71, 0.3) !important;
+    max-width: 300px !important;
+}
+
+/* Remove white background from section default */
+.uk-section-default {
+    background-color: transparent !important;
+}
+
+/* List page search input - improved contrast */
+.list-search-input {
+    border: 1px solid #e5e5e5 !important;
+    background-color: white !important;
+}
+
+.list-search-input:focus {
+    border-color: var(--s4a-red) !important;
+    background-color: white !important;
+}
+
+/* Hero Section with Mesh Gradient */
+.hero-section {
+    background-color: var(--s4a-dark-violet);
+    color: white;
+    /* Dynamic Asymmetric Wave */
+    border-radius: 0 0 80% 20% / 0 0 20% 10%;
+    padding-bottom: 120px !important;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Mesh Gradient Container */
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background: var(--s4a-dark-violet);
+}
+
+/* Common Blob Styles */
+.gradient-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    /* Increased blur */
+    opacity: 0.4;
+    /* Reduced opacity */
+    animation: floatBlob 20s infinite ease-in-out alternate;
+}
+
+/* Individual Blobs */
+.blob-1 {
+    top: -10%;
+    left: -10%;
+    width: 35vw;
+    /* Reduced size */
+    height: 35vw;
+    background: var(--s4a-light-violet);
+    animation-duration: 25s;
+}
+
+.blob-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 40vw;
+    /* Reduced size */
+    height: 40vw;
+    background: #4a148c;
+    animation-duration: 30s;
+    animation-direction: alternate-reverse;
+}
+
+.blob-3 {
+    top: 20%;
+    left: 10%;
+    width: 25vw;
+    /* Reduced size */
+    height: 25vw;
+    background: var(--s4a-red);
+    opacity: 0.25;
+    /* Even lower opacity for red */
+    animation-duration: 22s;
+}
+
+.blob-4 {
+    bottom: 10%;
+    right: 10%;
+    width: 20vw;
+    /* Reduced size */
+    height: 20vw;
+    background: #6a1b9a;
+    animation-duration: 28s;
+}
+
+/* Floating Animation */
+@keyframes floatBlob {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(8vw, -10vw) scale(1.1);
+        /* Increased movement */
+    }
+
+    66% {
+        transform: translate(-5vw, 8vw) scale(0.9);
+        /* Increased movement */
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* Texture Overlay (Keep on top of blobs) */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-section h1,
+.hero-section p {
+    color: white !important;
+}
+
+.hero-section .uk-text-light-accent {
+    color: var(--s4a-red) !important;
+    /* S4A Red for accent */
+}
+
+/* Hero Search Input Customization */
+.hero-section .uk-search-input {
+    color: #fff !important;
+}
+
+.hero-section .uk-search-input:focus::placeholder {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Search Results - Override hero section colors */
+#search-results,
+#search-results p,
+#search-results li {
+    color: #1f2937 !important;
+}
+
+#search-results strong {
+    color: #111827 !important;
+}
+
+#search-results a {
+    color: var(--s4a-red) !important;
+}
+
+@keyframes rotateGradient {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer */
+.uk-section-primary-dark {
+    background-color: var(--s4a-dark-violet) !important;
+    color: white !important;
+}

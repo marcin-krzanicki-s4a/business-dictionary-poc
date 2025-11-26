@@ -1,0 +1,10 @@
+id: ATTR-120
+name: Loading Belt
+description: Attribute representing Loading Belt.
+dataType: Decimal
+source: Inferred
+status: active
+unit: kg
+precision: 2
+minValue: 0.0
+example: 23.5

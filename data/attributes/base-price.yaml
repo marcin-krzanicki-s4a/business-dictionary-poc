@@ -1,0 +1,9 @@
+id: ATTR-006
+name: Base Price
+description: Currency amount representing the base fare for a flight.
+dataType: Decimal
+unit: "USD"
+minValue: 0
+precision: 2
+usedIn:
+  - FLIGHT
