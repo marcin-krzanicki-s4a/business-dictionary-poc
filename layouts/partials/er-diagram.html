@@ -1,0 +1,62 @@
+{{ $page := .Context }}
+{{ $section := $page.Section }}
+
+{{ if eq $section "objects" }}
+{{ $objectID := $page.File.BaseFileName }}
+{{ $objectData := index site.Data.objects $objectID }}
+
+{{ if $objectData }}
+<div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Entity-Relationship Diagram (Preview)</h2>
+    <div class="mermaid">
+        erDiagram
+        {{ $safeObjectName := $objectData.Name | default "Object" | replaceRE "[^a-zA-Z0-9]" "" }}
+
+        %% Main Entity
+        {{ $safeObjectName }} {
+        string EntityType "Business Object"
+        {{ range $objectData.CoreAttributes }}
+        string {{ .Name | default "Attribute" | replaceRE "[^a-zA-Z0-9]" "" }}
+        {{ end }}
+        }
+
+        %% Relationships and Related Entities
+        {{ if $objectData.CoreRelationships }}
+        {{ range $objectData.CoreRelationships }}
+        {{ $relatedObjName := .object }}
+        {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
+        {{ $relType := .type }}
+
+        %% Render Related Entity Details
+        {{ $relatedData := index site.Data.objects $relatedObjName }}
+        {{ if $relatedData }}
+        {{ $safeRelObjName }} {
+        string EntityType "Business Object"
+        {{ range $relatedData.CoreAttributes }}
+        string {{ .Name | default "Attribute" | replaceRE "[^a-zA-Z0-9]" "" }}
+        {{ end }}
+        }
+        {{ else }}
+        %% Fallback if data not found (e.g. external or missing)
+        {{ $safeRelObjName }} {
+        string EntityType "Unknown/External"
+        }
+        {{ end }}
+
+        %% Relationship Logic
+        {{ if eq $relType "has-one" }}
+        {{ $safeObjectName }} ||--|| {{ $safeRelObjName }} : "has one"
+        {{ else if or (eq $relType "has-many") (eq $relType "has-many (transient)") }}
+        {{ $safeObjectName }} ||--o{ {{ $safeRelObjName }} : "has many"
+        {{ else if eq $relType "belongs-to" }}
+        {{ $safeObjectName }} }o--|| {{ $safeRelObjName }} : "belongs to"
+        {{ else }}
+        {{ $safeObjectName }} ||--o{ {{ $safeRelObjName }} : "{{ $relType }}"
+        {{ end }}
+
+        {{ end }}
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+{{ end }}

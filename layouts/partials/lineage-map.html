@@ -11,7 +11,7 @@
         {{ $objectData := index site.Data.objects $objectID }}
 
         {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
-        object["{{ $objectData.Name | htmlEscape }}"]
+        object["(Business Object)<br />{{ $objectData.Name | htmlEscape }}"]
         style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:2px
 
         %% System of Record (Simulated)
@@ -25,9 +25,13 @@
         direction TB
         {{ range $objectData.CoreAttributes }}
         {{ $safeAttrName := .Name | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ .Name | htmlEscape }}"]
+        attr_{{ $safeAttrName }}["(Attribute)<br />{{ .Name | htmlEscape }}"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> object
+        {{ $attrPage := site.GetPage (printf "/attributes/%s" .Name) }}
+        {{ if $attrPage }}
+        click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
+        {{ end }}
         {{ end }}
         end
         {{ end }}
@@ -38,7 +42,7 @@
         {{ $relatedObjName := .object }}
         {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
         {{ $relType := .type }}
-        rel_{{ $safeRelObjName }}["{{ $relatedObjName | htmlEscape }}"]
+        rel_{{ $safeRelObjName }}["(Business Object)<br />{{ $relatedObjName | htmlEscape }}"]
         style rel_{{ $safeRelObjName }} fill:#fff3e0,stroke:#e65100,color:#e65100,stroke-width:1px
         {{ if or (eq $relType "has-one") (eq $relType "has-many") (eq $relType "has-many (transient)") }}
         object -.->|"{{ $relType | htmlEscape }}"| rel_{{ $safeRelObjName }}
@@ -53,7 +57,7 @@
         {{ if $objectData.SystemPerspectives }}
         {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
         {{ $safeSysName := $sysName | replaceRE "[^a-zA-Z0-9]" "" }}
-        persp_{{ $safeSysName }}["{{ $sysName | htmlEscape }}"]
+        persp_{{ $safeSysName }}["(Perspective)<br />{{ $sysName | htmlEscape }}"]
         style persp_{{ $safeSysName }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
         object -.-> persp_{{ $safeSysName }}
 
@@ -74,7 +78,7 @@
         {{ $viewData := index site.Data.views $viewID }}
 
         {{ $safeViewName := $viewID | replaceRE "[^a-zA-Z0-9]" "" }}
-        view["{{ $page.Title | htmlEscape }}"]
+        view["(UI View)<br />{{ $page.Title | htmlEscape }}"]
         style view fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:2px
 
         %% Upstream Attributes (Sample)
@@ -85,7 +89,7 @@
         {{ $attrName := "" }}
         {{ if reflect.IsMap . }}{{ $attrName = .Name }}{{ else }}{{ $attrName = . }}{{ end }}
         {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}"]
+        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}<br />(Attribute)"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> view
         {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
@@ -102,7 +106,7 @@
         {{ $roleName := "" }}
         {{ if reflect.IsMap . }}{{ $roleName = .Role | default .userRole }}{{ else }}{{ $roleName = . }}{{ end }}
         {{ $safeRoleName := $roleName | replaceRE "[^a-zA-Z0-9]" "" }}
-        role_{{ $safeRoleName }}("{{ $roleName | htmlEscape }}")
+        role_{{ $safeRoleName }}("(User Role)<br />{{ $roleName | htmlEscape }}")
         style role_{{ $safeRoleName }} fill:#e0f2f1,stroke:#00695c,color:#00695c,stroke-width:1px
         view -.-> role_{{ $safeRoleName }}
         {{ end }}
@@ -116,7 +120,7 @@
         {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
 
         {{ $safePerspName := $perspectiveID | replaceRE "[^a-zA-Z0-9]" "" }}
-        persp["{{ $perspectiveID | htmlEscape }}"]
+        persp["(Perspective)<br />{{ $perspectiveID | htmlEscape }}"]
         style persp fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:2px
 
         %% Upstream Object
@@ -133,7 +137,7 @@
         {{ range $sysData.RelevantAttributes }}
         {{ $attrName := .Name }}
         {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}"]
+        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}<br />(Attribute)"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> persp
         {{ end }}
@@ -145,7 +149,7 @@
         {{ range $sysData.ViewsUsed }}
         {{ $viewID := .ref }}
         {{ $safeViewName := $viewID | replaceRE "[^a-zA-Z0-9]" "" }}
-        view_{{ $safeViewName }}["{{ $viewID | htmlEscape }}"]
+        view_{{ $safeViewName }}["(UI View)<br />{{ $viewID | htmlEscape }}"]
         style view_{{ $safeViewName }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
         view_{{ $safeViewName }} -.-> persp
         {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
@@ -164,11 +168,11 @@
         {{ $usedIn := .UsedIn }}
 
         {{ $safeName := $attributeData.name | replaceRE "[^a-zA-Z0-9]" "" }}
-        root["{{ $attributeData.name | htmlEscape }}"]
+        root["(Attribute)<br />{{ $attributeData.name | htmlEscape }}"]
         style root fill:#f5f5f5,stroke:#666,stroke-width:2px,color:#333
 
         {{ if $page.Params.sourceSystem }}
-        source[("{{ $page.Params.sourceSystem | htmlEscape }}")]
+        source[("(System)<br />{{ $page.Params.sourceSystem | htmlEscape }}")]
         style source fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
         source -.-> root
         {{ end }}
@@ -176,7 +180,7 @@
         {{ range $index, $item := $usedIn }}
         {{ $itemName := $item.name | default "Unnamed Node" }}
         {{ $safeItemName := $itemName | replaceRE "[^a-zA-Z0-9]" "" }}
-        node{{ $index }}["{{ $itemName | htmlEscape }}"]
+        node{{ $index }}["({{ $item.type }})<br />{{ $itemName | htmlEscape }}"]
         root -.-> node{{ $index }}
 
         {{ if eq $item.type "Business Object" }}
