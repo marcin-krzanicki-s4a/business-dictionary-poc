@@ -85,6 +85,85 @@ def main():
             'example': 1013,
             'description': 'Atmospheric pressure adjusted to sea level.'
         },
+        'notams': {
+            'dataType': 'String',
+            'maxLength': 1000,
+            'example': 'RWY 27 CLSD DUE WX',
+            'description': 'Notice to Airmen - important flight information.'
+        },
+        'delays': {
+            'dataType': 'Integer',
+            'unit': 'minutes',
+            'minValue': 0,
+            'example': 45,
+            'description': 'Flight delay duration in minutes.'
+        },
+        'flight-aircraft-tailnumber': {
+            'dataType': 'String',
+            'format': '^[A-Z0-9-]{5,10}$',
+            'minLength': 5,
+            'maxLength': 10,
+            'example': 'N12345',
+            'description': 'Aircraft registration/tail number.'
+        },
+        'active-runway-configuration': {
+            'dataType': 'String',
+            'format': '^[0-9]{2}[LCR]?$',
+            'minLength': 2,
+            'maxLength': 3,
+            'example': '27L',
+            'description': 'Active runway designation (e.g., 27L for left runway).'
+        },
+        'nearest-lounge': {
+            'dataType': 'String',
+            'maxLength': 100,
+            'example': 'Platinum Lounge - Terminal A',
+            'description': 'Name/location of the nearest passenger lounge.'
+        },
+        'flight-route': {
+            'dataType': 'String',
+            'maxLength': 500,
+            'example': 'JFK-LAX-SFO',
+            'description': 'Flight route as sequence of airport codes.'
+        },
+        'hvac-status': {
+            'dataType': 'Enum',
+            'values': [
+                {'label': 'Normal', 'description': 'HVAC operating normally.'},
+                {'label': 'Maintenance', 'description': 'HVAC under maintenance.'},
+                {'label': 'Fault', 'description': 'HVAC system fault.'}
+            ],
+            'example': 'Normal',
+            'description': 'Heating, ventilation, and air conditioning status.'
+        },
+        'current-weather': {
+            'dataType': 'String',
+            'maxLength': 200,
+            'example': 'Clear skies, 22°C, wind 5kt from 270°',
+            'description': 'Current weather conditions summary.'
+        },
+        'arrival-airport': {
+            'dataType': 'String',
+            'format': '^[A-Z]{3}$',
+            'minLength': 3,
+            'maxLength': 3,
+            'example': 'LAX',
+            'description': 'IATA code of the arrival airport.'
+        },
+        'crewmanifest': {
+            'dataType': 'String',
+            'maxLength': 1000,
+            'example': 'Captain: John Smith, First Officer: Jane Doe, Flight Attendants: 4',
+            'description': 'List of crew members assigned to the flight.'
+        },
+        'departure-airport': {
+            'dataType': 'String',
+            'format': '^[A-Z]{3}$',
+            'minLength': 3,
+            'maxLength': 3,
+            'example': 'JFK',
+            'description': 'IATA code of the departure airport.'
+        },
         
         # Keyword matches (checked if no exact match)
         'keywords': [

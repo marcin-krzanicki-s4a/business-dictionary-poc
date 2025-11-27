@@ -1,6 +1,8 @@
 id: ATTR-116
 name: Flight.Route
-description: Attribute representing Flight.Route.
+description: Flight route as sequence of airport codes.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+maxLength: 500
+example: JFK-LAX-SFO

@@ -1,14 +1,39 @@
 {{ $page := .Context }}
 {{ $section := $page.Section }}
+{{ $mode := .Mode | default "auto" }}
 
-{{ if eq $section "objects" }}
+{{ if or (eq $mode "perspective") (and (eq $mode "auto") (eq $section "perspectives")) }}
+    {{ $objectData := .ObjectData }}
+    {{ $perspectiveData := .PerspectiveData }}
+    {{ $perspectiveID := .PerspectiveID }}
+
+    {{ if and $objectData $perspectiveData }}
+    <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+        <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Perspective Data Model</h2>
+        <p class="uk-text-small uk-text-muted">Subset of the data model relevant to this perspective.</p>
+        <div class="mermaid uk-text-center">
+            erDiagram
+            {{ $safeObjectName := $objectData.Name | default "Object" | replaceRE "[^a-zA-Z0-9]" "" }}
+
+            %% Main Entity (Filtered for Perspective)
+            {{ $safeObjectName }} {
+            string Context "{{ $perspectiveID }}"
+            {{ range $perspectiveData.RelevantAttributes }}
+            string {{ .Name | default "Attribute" | replaceRE "[^a-zA-Z0-9]" "" }}
+            {{ end }}
+            }
+        </div>
+    </div>
+    {{ end }}
+
+{{ else if or (eq $mode "object") (and (eq $mode "auto") (eq $section "objects")) }}
 {{ $objectID := $page.File.BaseFileName }}
 {{ $objectData := index site.Data.objects $objectID }}
 
 {{ if $objectData }}
 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Entity-Relationship Diagram (Preview)</h2>
-    <div class="mermaid">
+    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Entity-Relationship Diagram</h2>
+    <div class="mermaid uk-text-center">
         erDiagram
         {{ $safeObjectName := $objectData.Name | default "Object" | replaceRE "[^a-zA-Z0-9]" "" }}
 
@@ -19,6 +44,7 @@
         string {{ .Name | default "Attribute" | replaceRE "[^a-zA-Z0-9]" "" }}
         {{ end }}
         }
+
 
         %% Relationships and Related Entities
         {{ if $objectData.CoreRelationships }}

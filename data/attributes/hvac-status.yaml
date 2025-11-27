@@ -1,6 +1,17 @@
 id: ATTR-117
 name: HVAC Status
-description: Attribute representing HVAC Status.
-dataType: String
-source: Auto-generated
-status: draft
+description: Heating, ventilation, and air conditioning status.
+dataType: Enum
+source: Inferred
+status: active
+values:
+- key: NORMAL
+  label: Normal
+  description: HVAC operating normally.
+- key: MAINTENANCE
+  label: Maintenance
+  description: HVAC under maintenance.
+- key: FAULT
+  label: Fault
+  description: HVAC system fault.
+example: Normal

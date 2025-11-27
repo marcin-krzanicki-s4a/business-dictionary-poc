@@ -287,32 +287,42 @@
                 {{ end }}
                 {{ end }}
 
-                <!-- Usage References -->
-                {{ if gt (len $usedIn) 0 }}
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Usage References</h2>
-                    <p class="uk-text-small uk-text-muted">This attribute is referenced in the following contexts:</p>
-                    <ul class="uk-list uk-list-divider uk-text-small">
-                        {{ range $usedIn }}
-                        <li>
-                            <a href="{{ .link }}" class="uk-link-toggle uk-flex uk-flex-middle">
-                                <span class="uk-margin-small-right" uk-icon="icon: {{ .icon }}"
-                                    style="color: {{ .color | safeCSS }};"></span>
-                                <div>
-                                    <div class="uk-text-bold">{{ .name }}</div>
-                                    <div class="uk-text-meta" style="font-size: 0.8em;">{{ .type }}</div>
-                                </div>
-                            </a>
-                        </li>
-                        {{ end }}
-                    </ul>
-                </div>
+            </div>
+            <!-- End Main Column -->
 
-                <!-- Data Lineage Visualization -->
-                <!-- Data Lineage Visualization -->
-                {{ partial "lineage-map.html" (dict "Context" . "UsedIn" $usedIn) }}
+        </div>
+        <!-- End Grid -->
+
+        <!-- Full-width Footer Section -->
+        {{ if gt (len $usedIn) 0 }}
+        <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
+            <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Usage References</h2>
+            <p class="uk-text-small uk-text-muted">This attribute is referenced in the following contexts:</p>
+            <ul class="uk-list uk-list-divider uk-text-small">
+                {{ range $usedIn }}
+                <li>
+                    <a href="{{ .link }}" class="uk-link-toggle uk-flex uk-flex-middle">
+                        <span class="uk-margin-small-right" uk-icon="icon: {{ .icon }}"
+                            style="color: {{ .color }}"></span>
+                        <div>
+                            <div class="uk-text-bold">{{ .name }}</div>
+                            <div class="uk-text-meta" style="font-size: 0.8em;">{{ .type }}</div>
+                        </div>
+                    </a>
+                </li>
                 {{ end }}
-                {{ else }}
+            </ul>
+        </div>
+        {{ end }}
+
+        <!-- Data Lineage Map -->
+        {{ if gt (len $usedIn) 0 }}
+        {{ partial "lineage-map.html" (dict "Context" . "UsedIn" $usedIn) }}
+        {{ end }}
+
+    </div>
+</div>
+{{ else }}
                 <!-- Error message if attribute data not found -->
                 <div class="uk-section">
                     <div class="uk-container">

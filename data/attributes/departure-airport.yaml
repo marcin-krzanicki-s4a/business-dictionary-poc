@@ -1,6 +1,10 @@
 id: ATTR-109
 name: Departure Airport
-description: Attribute representing Departure Airport.
+description: IATA code of the departure airport.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+format: ^[A-Z]{3}$
+minLength: 3
+maxLength: 3
+example: JFK

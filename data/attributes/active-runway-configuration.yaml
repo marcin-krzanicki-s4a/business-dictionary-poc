@@ -1,6 +1,10 @@
 id: ATTR-100
 name: Active Runway Configuration
-description: Attribute representing Active Runway Configuration.
+description: Active runway designation (e.g., 27L for left runway).
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+format: ^[0-9]{2}[LCR]?$
+minLength: 2
+maxLength: 3
+example: 27L

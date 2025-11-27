@@ -2,7 +2,7 @@ Description: A detailed briefing package for the assigned flight crew.
 Platform: Mobile
 Status: "draft"
 IncludedAttributes:
-  - Flight.FlightNumber
+  - Flight Number
   - Flight.Route
   - Flight.Aircraft.TailNumber
   - CrewManifest

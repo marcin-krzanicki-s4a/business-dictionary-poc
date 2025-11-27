@@ -43,13 +43,13 @@
                     <div class="uk-text-lead">{{ $viewData.Description }}</div>
                 </div>
 
-                <!-- Permissions / Access Rules -->
-                {{ if $viewData.AccessRules }}
+                <!-- Role Context & Content (Permissions, Attributes, Actions) -->
+                {{ if or $viewData.AccessRules $viewData.IncludedAttributes $viewData.AvailableCTAs }}
                 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Permissions</h2>
-
+                    
                     <!-- Role/User Type Filter -->
-                    <div class="uk-margin-bottom">
+                    {{ if $viewData.AccessRules }}
+                    <div class="uk-margin-medium-bottom">
                         <p class="uk-text-small uk-text-muted uk-margin-small-bottom">Select a role to see what this
                             user can do:</p>
                         <div class="uk-flex uk-flex-wrap uk-flex-gap">
@@ -70,9 +70,12 @@
                             {{ end }}
                         </div>
                     </div>
+                    {{ end }}
 
-                    <!-- Permissions Table -->
-                    <table class="uk-table uk-table-striped uk-table-small">
+                    <!-- Permissions Section -->
+                    {{ if $viewData.AccessRules }}
+                    <h3 class="uk-h4" style="color: var(--s4a-light-violet);">Permissions</h3>
+                    <table class="uk-table uk-table-striped uk-table-small uk-margin-bottom">
                         <thead>
                             <tr>
                                 <th>Role / User Type</th>
@@ -105,14 +108,15 @@
                             {{ end }}
                         </tbody>
                     </table>
-                </div>
-                {{ end }}
-                {{ if $viewData.IncludedAttributes }}
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Included Attributes</h2>
+                    {{ end }}
+
+                    <!-- Included Attributes Section -->
+                    {{ if $viewData.IncludedAttributes }}
+                    {{ if $viewData.AccessRules }}<hr class="uk-divider-icon">{{ end }}
+                    <h3 class="uk-h4" style="color: var(--s4a-light-violet);">Included Attributes</h3>
                     <p class="uk-text-small uk-text-muted uk-margin-small-bottom" id="attributes-info">Showing
                         attributes for all roles</p>
-                    <table class="uk-table uk-table-striped uk-table-small">
+                    <table class="uk-table uk-table-striped uk-table-small uk-margin-bottom">
                         <thead>
                             <tr>
                                 <th>Attribute</th>
@@ -160,13 +164,12 @@
                             {{ end }}
                         </tbody>
                     </table>
-                </div>
-                {{ end }}
+                    {{ end }}
 
-                <!-- Available CTAs -->
-                {{ if $viewData.AvailableCTAs }}
-                <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Available Actions</h2>
+                    <!-- Available Actions Section -->
+                    {{ if $viewData.AvailableCTAs }}
+                    {{ if or $viewData.AccessRules $viewData.IncludedAttributes }}<hr class="uk-divider-icon">{{ end }}
+                    <h3 class="uk-h4" style="color: var(--s4a-light-violet);">Available Actions</h3>
                     <p class="uk-text-small uk-text-muted uk-margin-small-bottom" id="actions-info">Showing actions for
                         all roles</p>
                     <table class="uk-table uk-table-striped uk-table-small">
@@ -202,6 +205,8 @@
                             {{ end }}
                         </tbody>
                     </table>
+                    {{ end }}
+
                 </div>
                 {{ end }}
 

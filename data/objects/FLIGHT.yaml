@@ -94,10 +94,10 @@ SystemPerspectives:
       - Baggage Handlers
       - Ramp Agents
     RelevantAttributes:
-      - Name: Total Bag Count
+      - Name: Baggage Count
         Type: Integer
         Source: Check-in System
-      - Name: Total Bag Weight
+      - Name: Baggage Weight
         Type: Weight
         Source: Check-in System
       - Name: Loading Belt

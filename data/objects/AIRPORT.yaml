@@ -7,7 +7,7 @@ BusinessDefinition: |
   aircraft to take off, land, and for passengers and cargo to be processed.
 
 CoreAttributes:
-  - Name: Airport Code (IATA)
+  - Name: IATA Code
     Type: String
     Source: IATA Registry
     APICall: GET /ref/airports/{code}

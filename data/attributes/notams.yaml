@@ -1,6 +1,8 @@
 id: ATTR-121
 name: NOTAMs
-description: Attribute representing NOTAMs.
+description: Notice to Airmen - important flight information.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+maxLength: 1000
+example: RWY 27 CLSD DUE WX

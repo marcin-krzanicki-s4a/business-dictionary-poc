@@ -6,61 +6,73 @@
         <h1 class="uk-heading-medium" style="color: var(--s4a-dark-violet);">Browse All</h1>
         <p class="uk-text-lead uk-text-muted">All objects, perspectives, and views in one place</p>
 
-        <!-- Filter and Search Bar -->
-        <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
-            <div class="uk-width-expand@m">
-                <form class="uk-search uk-search-default uk-width-1-1">
-                    <span uk-search-icon></span>
-                    <input class="uk-search-input uk-width-1-1 list-search-input" type="search"
-                        placeholder="Filter by Name or ID..." aria-label="Search">
-                </form>
-            </div>
-            <div class="uk-width-auto">
-                <div uk-form-custom="target: > * > span">
-                    <select aria-label="Category Filter">
-                        <option value="">All Categories</option>
-                        <option value="1">Business Object</option>
-                        <option value="2">UI View</option>
-                        <option value="3">Perspective</option>
-                        <option value="4">Global Attribute</option>
-                    </select>
-                    <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
-                        Category: <span>All Categories</span> <span uk-icon="icon: chevron-down"></span>
-                    </button>
+        <!-- Tabs Navigation -->
+        <ul class="uk-tab" uk-tab="connect: #browse-switcher">
+            <li class="uk-active"><a href="#">Browse List</a></li>
+            <li><a href="#">Global Domain Model</a></li>
+            <li><a href="#">Data Lineage</a></li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <ul id="browse-switcher" class="uk-switcher uk-margin">
+            
+            <!-- Tab 1: Browse List -->
+            <li>
+                <!-- Filter and Search Bar -->
+                <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+                    <div class="uk-width-expand@m">
+                        <form class="uk-search uk-search-default uk-width-1-1">
+                            <span uk-search-icon></span>
+                            <input class="uk-search-input uk-width-1-1 list-search-input" type="search"
+                                placeholder="Filter by Name or ID..." aria-label="Search">
+                        </form>
+                    </div>
+                    <div class="uk-width-auto">
+                        <div uk-form-custom="target: > * > span">
+                            <select aria-label="Category Filter">
+                                <option value="">All Categories</option>
+                                <option value="1">Business Object</option>
+                                <option value="2">UI View</option>
+                                <option value="3">Perspective</option>
+                                <option value="4">Global Attribute</option>
+                            </select>
+                            <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
+                                Category: <span>All Categories</span> <span uk-icon="icon: chevron-down"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="uk-width-auto">
+                        <div uk-form-custom="target: > * > span">
+                            <select aria-label="Status Filter">
+                                <option value="">All Statuses</option>
+                                <option value="1">Active</option>
+                                <option value="2">Draft</option>
+                                <option value="3">Deprecated</option>
+                            </select>
+                            <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
+                                Status: <span>All Statuses</span> <span uk-icon="icon: chevron-down"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="uk-width-auto">
-                <div uk-form-custom="target: > * > span">
-                    <select aria-label="Status Filter">
-                        <option value="">All Statuses</option>
-                        <option value="1">Active</option>
-                        <option value="2">Draft</option>
-                        <option value="3">Deprecated</option>
-                    </select>
-                    <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
-                        Status: <span>All Statuses</span> <span uk-icon="icon: chevron-down"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
 
-        <hr class="uk-margin-large">
+                <hr class="uk-margin-large">
 
-        <!-- Responsive Card Grid -->
-        <div class="uk-child-width-1-1 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-match"
-            uk-grid>
+                <!-- Responsive Card Grid -->
+                <div class="uk-child-width-1-1 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-match"
+                    uk-grid>
 
-            <!-- Attributes -->
-            {{ range where site.RegularPages "Section" "attributes" }}
-            {{ $attributeID := .File.BaseFileName }}
-            {{ $attributeData := index site.Data.attributes $attributeID }}
-            {{ if $attributeData }}
-            {{ $status := "Active" }}
+                    <!-- Attributes -->
+                    {{ range where site.RegularPages "Section" "attributes" }}
+                    {{ $attributeID := .File.BaseFileName }}
+                    {{ $attributeData := index site.Data.attributes $attributeID }}
+                    {{ if $attributeData }}
+                    {{ $status := "Active" }}
 
-            <div>
-                <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
-                        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+                    <div>
+                        <a href="{{ .RelPermalink }}" class="uk-link-reset">
+                            <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                                <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
                             <span class="uk-text-small uk-text-uppercase" style="color: #666;">
                                 <span uk-icon="icon: tag; ratio: 0.8" class="uk-margin-small-right"></span>
                                 Global Attribute
@@ -159,7 +171,115 @@
             {{ end }}
 
         </div>
+            </li>
+
+            <!-- Tab 2: Domain Model Diagram -->
+            <li>
+                <div class="uk-card uk-card-default uk-card-body content-card">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Global Domain Model</h2>
+                    <p class="uk-text-small uk-text-muted">Visualizing relationships between all Business Objects.</p>
+                    <!-- Changed class to mermaid-lazy to prevent auto-load while hidden -->
+                    <div class="mermaid-lazy uk-text-center" style="visibility: hidden;">
+                        erDiagram
+                        {{ range $id, $data := site.Data.objects }}
+                        {{ $safeName := $data.Name | default $id | replaceRE "[^a-zA-Z0-9]" "" }}
+                        
+                        {{ $safeName }} {
+                            string ID "{{ $data.TermID | default $id }}"
+                        }
+
+                        {{ if $data.CoreRelationships }}
+                        {{ range $data.CoreRelationships }}
+                        {{ if .object }}
+                        {{ $relatedObjName := .object }}
+                        {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
+                        {{ $relType := .type }}
+
+                        {{ if eq $relType "has-one" }}
+                        {{ $safeName }} ||--|| {{ $safeRelObjName }} : "has one"
+                        {{ else if or (eq $relType "has-many") (eq $relType "has-many (transient)") }}
+                        {{ $safeName }} ||--o{ {{ $safeRelObjName }} : "has many"
+                        {{ else if eq $relType "belongs-to" }}
+                        {{ $safeName }} }o--|| {{ $safeRelObjName }} : "belongs to"
+                        {{ else }}
+                        {{ $safeName }} ||--o{ {{ $safeRelObjName }} : "{{ $relType }}"
+                        {{ end }}
+
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+            </li>
+            <!-- Tab 3: Data Lineage -->
+            <li>
+                <div class="uk-card uk-card-default uk-card-body content-card">
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage</h2>
+                    <p class="uk-text-small uk-text-muted">Tracing data flow from Objects to Perspectives and Views.</p>
+                    <div class="mermaid-lazy uk-text-center" style="visibility: hidden;">
+                        graph LR
+                        %% Nodes and Styles
+                        classDef object fill:#EB0045,color:white,stroke:#333,stroke-width:2px;
+                        classDef perspective fill:#31006F,color:white,stroke:#333,stroke-width:2px;
+                        classDef view fill:#201747,color:white,stroke:#333,stroke-width:2px;
+
+                        %% Objects
+                        {{ range $id, $data := site.Data.objects }}
+                        {{ $safeObjName := $data.Name | default $id | replaceRE "[^a-zA-Z0-9]" "" }}
+                        {{ $safeObjName }}["{{ $data.Name }}"]:::object
+
+                        %% Perspectives linked to this Object
+                        {{ if $data.SystemPerspectives }}
+                        {{ range $pName, $pData := $data.SystemPerspectives }}
+                        {{ $safePName := printf "%s_%s" $safeObjName ($pName | replaceRE "[^a-zA-Z0-9]" "") }}
+                        {{ $safePName }}["{{ $pName }}"]:::perspective
+                        {{ $safeObjName }} --> {{ $safePName }}
+
+                        %% Views linked to this Perspective
+                        {{ if $pData.ViewsUsed }}
+                        {{ range $pData.ViewsUsed }}
+                        {{ $viewRef := .ref }}
+                        {{ $safeViewName := $viewRef | replaceRE "[^a-zA-Z0-9]" "" }}
+                        {{ $safeViewName }}["{{ $viewRef }}"]:::view
+                        {{ $safePName }} --> {{ $safeViewName }}
+                        {{ end }}
+                        {{ end }}
+
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+            </li>
+        </ul>
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        UIkit.util.on('#browse-switcher', 'shown', function (event) {
+            var activeTab = event.target;
+            // Look for the lazy-loaded mermaid container in the active tab
+            var lazyMermaid = activeTab.querySelector('.mermaid-lazy');
+            
+            if (lazyMermaid) {
+                // 1. Reveal the container (it is now inside a visible tab)
+                lazyMermaid.style.visibility = 'visible';
+                lazyMermaid.classList.remove('mermaid-lazy');
+                lazyMermaid.classList.add('mermaid');
+                
+                // 2. Initialize Mermaid explicitly on this element
+                try {
+                    mermaid.init(undefined, lazyMermaid);
+                } catch (e) {
+                    console.error("Mermaid rendering failed:", e);
+                    lazyMermaid.innerHTML = '<div class="uk-alert uk-alert-danger">Error rendering diagram. Please refresh the page.</div>';
+                }
+            }
+        });
+    });
+</script>
+
 {{ end }}

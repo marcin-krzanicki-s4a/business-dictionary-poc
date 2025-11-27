@@ -1,8 +1,8 @@
 ---
 title: "HVAC Status"
 id: "ATTR-117"
-dataType: "String"
-description: "Attribute representing HVAC Status."
+dataType: "Enum"
+description: "Heating, ventilation, and air conditioning status."
 sourceSystem: "Data Lake"
 sourceType: "Internal"
 sourceEntity: "RAW_INGESTION_LAYER"

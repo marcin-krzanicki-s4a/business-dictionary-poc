@@ -3,7 +3,7 @@ Description: The main dashboard for ground controllers, showing a real-time over
 Platform: Web-Desktop
 Status: "draft"
 IncludedAttributes:
-  - Airport Code (IATA)
+  - IATA Code
   - Operating Status
   - Current Weather.Temperature
   - Congestion Level

@@ -36,74 +36,75 @@
             uk-grid>
 
             {{ range .Pages }}
-            <!-- Determine Badge Label, Color and Icon based on Section -->
-            {{ $badgeLabel := "Item" }}
-            {{ $badgeColor := "#666" }}
-            {{ $icon := "file" }}
-            {{ $section := lower .Section }}
-            
-            {{ if eq $section "objects" }}
-                {{ $badgeLabel = "Business Object" }}
-                {{ $badgeColor = "var(--s4a-red)" }}
-                {{ $icon = "file-text" }}
-            {{ else if eq $section "perspectives" }}
-                {{ $badgeLabel = "Perspective" }}
-                {{ $badgeColor = "var(--s4a-light-violet)" }}
-                {{ $icon = "album" }}
-            {{ else if eq $section "views" }}
-                {{ $badgeLabel = "UI View" }}
-                {{ $badgeColor = "var(--s4a-dark-violet)" }}
-                {{ $icon = "laptop" }}
-            {{ end }}
-
-            <!-- Determine Status from Data Files -->
-            {{ $status := "Draft" }}
-            {{ if eq $section "objects" }}
-                {{ $objectID := .File.BaseFileName }}
-                {{ $objectData := index site.Data.objects $objectID }}
-                {{ if $objectData }}
-                    {{ $status = $objectData.Status | default "Draft" }}
-                {{ end }}
-            {{ else if eq $section "views" }}
-                {{ $viewID := .File.BaseFileName }}
-                {{ $viewData := index site.Data.views $viewID }}
-                {{ if $viewData }}
-                    {{ $status = $viewData.Status | default "Draft" }}
-                {{ end }}
-            {{ else if eq $section "perspectives" }}
-                {{ $objectID := .Params.object_id }}
-                {{ $perspectiveID := .Params.perspective_id }}
-                {{ $objectData := index site.Data.objects $objectID }}
-                {{ if $objectData }}
-                    {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
-                    {{ if $sysData }}
-                        {{ $status = $sysData.Status | default "Draft" }}
+                    <!-- Determine Badge Label, Color and Icon based on Section -->
+                    {{ $badgeLabel := "Item" }}
+                    {{ $badgeColor := "#666" }}
+                    {{ $icon := "file" }}
+                    {{ $section := lower .Section }}
+                    
+                    {{ if eq $section "objects" }}
+                        {{ $badgeLabel = "Business Object" }}
+                        {{ $badgeColor = "var(--s4a-red)" }}
+                        {{ $icon = "file-text" }}
+                    {{ else if eq $section "perspectives" }}
+                        {{ $badgeLabel = "Perspective" }}
+                        {{ $badgeColor = "var(--s4a-light-violet)" }}
+                        {{ $icon = "album" }}
+                    {{ else if eq $section "views" }}
+                        {{ $badgeLabel = "UI View" }}
+                        {{ $badgeColor = "var(--s4a-dark-violet)" }}
+                        {{ $icon = "laptop" }}
                     {{ end }}
-                {{ end }}
-            {{ end }}
 
-            <div>
-                <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
-                        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
-                            <span class="uk-text-small uk-text-uppercase" style="color: {{ $badgeColor }};">
-                                <span uk-icon="icon: {{ $icon }}; ratio: 0.8" class="uk-margin-small-right"></span>
-                                {{ $badgeLabel }}
-                            </span>
-                        </div>
-                        <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate" uk-tooltip="title: {{ .Title }}">{{ .Title }}</h3>
-                        <div class="uk-margin-small-top">
-                            <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{ $status }}</span>
-                        </div>
-                        {{ if .Params.id }}
-                        <div class="uk-text-meta uk-margin-small-top">ID: {{ .Params.id }}</div>
+                    <!-- Determine Status from Data Files -->
+                    {{ $status := "Draft" }}
+                    {{ if eq $section "objects" }}
+                        {{ $objectID := .File.BaseFileName }}
+                        {{ $objectData := index site.Data.objects $objectID }}
+                        {{ if $objectData }}
+                            {{ $status = $objectData.Status | default "Draft" }}
                         {{ end }}
-                    </div>
-                </a>
-            </div>
-            {{ end }}
+                    {{ else if eq $section "views" }}
+                        {{ $viewID := .File.BaseFileName }}
+                        {{ $viewData := index site.Data.views $viewID }}
+                        {{ if $viewData }}
+                            {{ $status = $viewData.Status | default "Draft" }}
+                        {{ end }}
+                    {{ else if eq $section "perspectives" }}
+                        {{ $objectID := .Params.object_id }}
+                        {{ $perspectiveID := .Params.perspective_id }}
+                        {{ $objectData := index site.Data.objects $objectID }}
+                        {{ if $objectData }}
+                            {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
+                            {{ if $sysData }}
+                                {{ $status = $sysData.Status | default "Draft" }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
 
-        </div>
+                    <div>
+                        <a href="{{ .RelPermalink }}" class="uk-link-reset">
+                            <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                                <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+                                    <span class="uk-text-small uk-text-uppercase" style="color: {{ $badgeColor }};">
+                                        <span uk-icon="icon: {{ $icon }}; ratio: 0.8" class="uk-margin-small-right"></span>
+                                        {{ $badgeLabel }}
+                                    </span>
+                                </div>
+                                <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate" uk-tooltip="title: {{ .Title }}">{{ .Title }}</h3>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{ $status }}</span>
+                                </div>
+                                {{ if .Params.id }}
+                                <div class="uk-text-meta uk-margin-small-top">ID: {{ .Params.id }}</div>
+                                {{ end }}
+                            </div>
+                        </a>
+                    </div>
+                    {{ end }}
+                </div>
+            </li>
+        </ul>
 
     </div>
 </div>

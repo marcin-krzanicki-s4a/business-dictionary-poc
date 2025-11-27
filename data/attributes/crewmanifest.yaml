@@ -1,6 +1,8 @@
 id: ATTR-105
 name: CrewManifest
-description: Attribute representing CrewManifest.
+description: List of crew members assigned to the flight.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+maxLength: 1000
+example: 'Captain: John Smith, First Officer: Jane Doe, Flight Attendants: 4'

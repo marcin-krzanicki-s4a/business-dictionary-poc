@@ -5,14 +5,19 @@ dataType: Enum
 source: Inferred
 status: active
 values:
-- label: Scheduled
+- key: SCHEDULED
+  label: Scheduled
   description: Flight is planned.
-- label: Active
+- key: ACTIVE
+  label: Active
   description: Flight is currently in the air.
-- label: Landed
+- key: LANDED
+  label: Landed
   description: Flight has arrived.
-- label: Cancelled
+- key: CANCELLED
+  label: Cancelled
   description: Flight has been cancelled.
-- label: Delayed
+- key: DELAYED
+  label: Delayed
   description: Flight is delayed.
 example: Active

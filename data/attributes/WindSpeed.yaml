@@ -4,6 +4,11 @@ description: Velocity of wind movement.
 dataType: Decimal
 unit: "km/h"
 minValue: 0
+maxValue: 300
+precision: 1
+example: 15.5
+source: Inferred
+status: active
 usedIn:
   - CurrentWeather
   - AIRPORT

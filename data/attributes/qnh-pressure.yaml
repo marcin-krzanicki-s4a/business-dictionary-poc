@@ -1,7 +1,0 @@
-id: ATTR-023
-name: QNH Pressure
-description: Altimeter setting for barometric pressure.
-dataType: Decimal
-unit: "hPa"
-usedIn:
-  - AIRPORT

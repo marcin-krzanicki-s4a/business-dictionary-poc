@@ -1,6 +1,10 @@
 id: ATTR-103
 name: Arrival Airport
-description: Attribute representing Arrival Airport.
+description: IATA code of the arrival airport.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+format: ^[A-Z]{3}$
+minLength: 3
+maxLength: 3
+example: LAX

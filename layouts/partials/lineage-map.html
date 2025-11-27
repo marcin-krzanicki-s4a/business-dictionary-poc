@@ -1,6 +1,6 @@
 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
     <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
-    <div class="mermaid">
+    <div class="mermaid uk-text-center">
         flowchart LR
         {{ $page := .Context }}
         {{ $section := $page.Section }}
@@ -140,6 +140,10 @@
         attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}<br />(Attribute)"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> persp
+        {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
+        {{ if $attrPage }}
+        click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
+        {{ end }}
         {{ end }}
         end
         {{ end }}

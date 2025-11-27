@@ -1,6 +1,8 @@
 id: ATTR-123
 name: Nearest Lounge
-description: Attribute representing Nearest Lounge.
+description: Name/location of the nearest passenger lounge.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+maxLength: 100
+example: Platinum Lounge - Terminal A

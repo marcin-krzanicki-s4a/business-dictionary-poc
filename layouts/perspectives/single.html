@@ -55,10 +55,10 @@
                     {{ end }}
                 </div>
 
-                <!-- Relevant Attributes Table -->
+                <!-- Extended Attributes Table -->
                 {{ if $sysData.RelevantAttributes }}
                 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-top uk-margin-bottom">
-                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Relevant Attributes</h2>
+                    <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Extended Attributes</h2>
                     <div class="uk-overflow-auto">
                         <table
                             class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-responsive uk-margin-top">
@@ -121,37 +121,28 @@
                     <p class="uk-text-small uk-text-muted">Screens and interfaces associated with this perspective.</p>
 
                     {{ if $sysData.ViewsUsed }}
-                    <div class="uk-grid-small uk-child-width-1-2@s uk-grid-match" uk-grid>
+                    <ul class="uk-list uk-list-divider uk-text-small">
                         {{ range $sysData.ViewsUsed }}
                         {{ $viewID := .ref }}
                         {{ $viewData := index site.Data.views $viewID }}
                         {{ if $viewData }}
-                        <div>
-                            {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
-                            {{ $viewLink := "" }}
-                            {{ if $viewPage }}
-                            {{ $viewLink = $viewPage.RelPermalink }}
-                            {{ else }}
-                            {{ $viewLink = printf "views/%s/" ($viewID | urlize) | relURL }}
-                            {{ end }}
-                            <a href="{{ $viewLink }}" class="uk-link-reset">
-                                <div
-                                    class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding-small uk-height-1-1">
-                                    <div class="uk-text-small uk-text-muted">UI View</div>
-                                    <h4 class="uk-card-title uk-margin-small-top uk-text-small">{{ $viewID }}</h4>
-                                    <p class="uk-text-meta">{{ $viewData.Platform }}</p>
-                                </div>
-                            </a>
-                        </div>
+                        {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
+                        {{ $viewLink := "" }}
+                        {{ if $viewPage }}
+                        {{ $viewLink = $viewPage.RelPermalink }}
+                        {{ else }}
+                        {{ $viewLink = printf "views/%s/" ($viewID | urlize) | relURL }}
+                        {{ end }}
+                        <li><a href="{{ $viewLink }}" class="uk-link-toggle"><span
+                                    class="uk-text-primary-red" uk-icon="icon: laptop"></span> {{ $viewID }} <span class="uk-text-muted">({{ $viewData.Platform }})</span></a></li>
                         {{ end }}
                         {{ end }}
-                    </div>
+                    </ul>
                     {{ else }}
                     <p class="uk-text-small uk-text-muted">No specific views linked.</p>
                     {{ end }}
                 </div>
 
-                <!-- Data Lineage Map -->
                 <!-- Data Lineage Map -->
                 {{ partial "lineage-map.html" (dict "Context" .) }}
 

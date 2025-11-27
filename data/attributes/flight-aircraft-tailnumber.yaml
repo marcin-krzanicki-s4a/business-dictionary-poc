@@ -1,6 +1,10 @@
 id: ATTR-114
 name: Flight.Aircraft.TailNumber
-description: Attribute representing Flight.Aircraft.TailNumber.
+description: Aircraft registration/tail number.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+format: ^[A-Z0-9-]{5,10}$
+minLength: 5
+maxLength: 10
+example: N12345

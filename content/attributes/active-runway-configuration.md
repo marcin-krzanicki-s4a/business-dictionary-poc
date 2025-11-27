@@ -2,7 +2,7 @@
 title: "Active Runway Configuration"
 id: "ATTR-100"
 dataType: "String"
-description: "Attribute representing Active Runway Configuration."
+description: "Active runway designation (e.g., 27L for left runway)."
 sourceSystem: "Airport BMS / Tower"
 sourceType: "Internal"
 sourceEntity: "INFRA_STATUS_REALTIME"

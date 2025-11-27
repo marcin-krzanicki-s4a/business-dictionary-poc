@@ -1,6 +1,8 @@
 id: ATTR-106
 name: Current Weather
-description: Attribute representing Current Weather.
+description: Current weather conditions summary.
 dataType: String
-source: Auto-generated
-status: draft
+source: Inferred
+status: active
+maxLength: 200
+example: "Clear skies, 22\xB0C, wind 5kt from 270\xB0"

@@ -1,6 +1,9 @@
 id: ATTR-108
 name: Delays
-description: Attribute representing Delays.
-dataType: String
-source: Auto-generated
-status: draft
+description: Flight delay duration in minutes.
+dataType: Integer
+source: Inferred
+status: active
+unit: minutes
+minValue: 0
+example: 45
