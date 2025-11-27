@@ -123,15 +123,22 @@
                     {{ if $sysData.ViewsUsed }}
                     <div class="uk-grid-small uk-child-width-1-2@s uk-grid-match" uk-grid>
                         {{ range $sysData.ViewsUsed }}
-                        {{ $viewName := .ref }}
-                        {{ $viewData := index site.Data.views $viewName }}
+                        {{ $viewID := .ref }}
+                        {{ $viewData := index site.Data.views $viewID }}
                         {{ if $viewData }}
                         <div>
-                            <a href="{{ `views/` | relURL }}{{ $viewName }}" class="uk-link-reset">
+                            {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
+                            {{ $viewLink := "" }}
+                            {{ if $viewPage }}
+                            {{ $viewLink = $viewPage.RelPermalink }}
+                            {{ else }}
+                            {{ $viewLink = printf "views/%s/" ($viewID | urlize) | relURL }}
+                            {{ end }}
+                            <a href="{{ $viewLink }}" class="uk-link-reset">
                                 <div
                                     class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding-small uk-height-1-1">
                                     <div class="uk-text-small uk-text-muted">UI View</div>
-                                    <h4 class="uk-card-title uk-margin-small-top uk-text-small">{{ $viewName }}</h4>
+                                    <h4 class="uk-card-title uk-margin-small-top uk-text-small">{{ $viewID }}</h4>
                                     <p class="uk-text-meta">{{ $viewData.Platform }}</p>
                                 </div>
                             </a>

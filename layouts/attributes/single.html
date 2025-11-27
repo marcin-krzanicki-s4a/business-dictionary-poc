@@ -238,8 +238,17 @@
                 {{ end }}
                 {{ end }}
                 {{ if $found }}
-                {{ $usedIn = $usedIn | append (dict "name" $perspID "type" "Perspective" "link" (printf
-                "perspectives/%s/" (urlize $perspID) | relURL) "icon" "album" "color" "var(--s4a-light-violet)") }}
+                {{ $perspLink := "" }}
+                {{ range where site.RegularPages "Section" "perspectives" }}
+                {{ if and (eq .Params.object_id $objID) (eq .Params.perspective_id $perspID) }}
+                {{ $perspLink = .RelPermalink }}
+                {{ end }}
+                {{ end }}
+                {{ if eq $perspLink "" }}
+                {{ $perspLink = printf "perspectives/%s/" ($perspID | urlize) | relURL }}
+                {{ end }}
+                {{ $usedIn = $usedIn | append (dict "name" $perspID "type" "Perspective" "link" $perspLink "icon"
+                "album" "color" "var(--s4a-light-violet)") }}
                 {{ end }}
                 {{ end }}
                 {{ end }}
@@ -266,11 +275,15 @@
                 {{ if $found }}
                 {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
                 {{ $viewTitle := $viewID }}
+                {{ $viewLink := "" }}
                 {{ if $viewPage }}
                 {{ $viewTitle = $viewPage.Title }}
+                {{ $viewLink = $viewPage.RelPermalink }}
+                {{ else }}
+                {{ $viewLink = printf "views/%s/" ($viewID | urlize) | relURL }}
                 {{ end }}
-                {{ $usedIn = $usedIn | append (dict "name" $viewTitle "type" "UI View" "link" (printf "views/%s/"
-                $viewID | relURL) "icon" "laptop" "color" "var(--s4a-dark-violet)") }}
+                {{ $usedIn = $usedIn | append (dict "name" $viewTitle "type" "UI View" "link" $viewLink "icon" "laptop"
+                "color" "var(--s4a-dark-violet)") }}
                 {{ end }}
                 {{ end }}
 

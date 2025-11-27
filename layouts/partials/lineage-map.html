@@ -1,7 +1,7 @@
 <div class="uk-card uk-card-default uk-card-body content-card uk-margin-bottom">
     <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage Map</h2>
     <div class="mermaid">
-        graph LR
+        flowchart LR
         {{ $page := .Context }}
         {{ $section := $page.Section }}
 
@@ -11,7 +11,7 @@
         {{ $objectData := index site.Data.objects $objectID }}
 
         {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
-        object["{{ $objectData.Name }}"]
+        object["{{ $objectData.Name | htmlEscape }}"]
         style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:2px
 
         %% System of Record (Simulated)
@@ -23,16 +23,11 @@
         {{ if $objectData.CoreAttributes }}
         subgraph Attributes
         direction TB
-        {{ range first 5 $objectData.CoreAttributes }}
+        {{ range $objectData.CoreAttributes }}
         {{ $safeAttrName := .Name | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ .Name }}"]
+        attr_{{ $safeAttrName }}["{{ .Name | htmlEscape }}"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> object
-        {{ end }}
-        {{ if gt (len $objectData.CoreAttributes) 5 }}
-        more_attr["...and {{ sub (len $objectData.CoreAttributes) 5 }} more"]
-        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-        more_attr -.-> object
         {{ end }}
         end
         {{ end }}
@@ -43,12 +38,12 @@
         {{ $relatedObjName := .object }}
         {{ $safeRelObjName := $relatedObjName | replaceRE "[^a-zA-Z0-9]" "" }}
         {{ $relType := .type }}
-        rel_{{ $safeRelObjName }}["{{ $relatedObjName }}"]
+        rel_{{ $safeRelObjName }}["{{ $relatedObjName | htmlEscape }}"]
         style rel_{{ $safeRelObjName }} fill:#fff3e0,stroke:#e65100,color:#e65100,stroke-width:1px
         {{ if or (eq $relType "has-one") (eq $relType "has-many") (eq $relType "has-many (transient)") }}
-        object -.->|"{{ $relType }}"| rel_{{ $safeRelObjName }}
+        object -.->|"{{ $relType | htmlEscape }}"| rel_{{ $safeRelObjName }}
         {{ else }}
-        rel_{{ $safeRelObjName }} -.->|"{{ $relType }}"| object
+        rel_{{ $safeRelObjName }} -.->|"{{ $relType | htmlEscape }}"| object
         {{ end }}
         click rel_{{ $safeRelObjName }} "{{ (printf "objects/%s" ($relatedObjName | lower)) | relURL }}"
         {{ end }}
@@ -58,7 +53,7 @@
         {{ if $objectData.SystemPerspectives }}
         {{ range $sysName, $sysData := $objectData.SystemPerspectives }}
         {{ $safeSysName := $sysName | replaceRE "[^a-zA-Z0-9]" "" }}
-        persp_{{ $safeSysName }}["{{ $sysName }}"]
+        persp_{{ $safeSysName }}["{{ $sysName | htmlEscape }}"]
         style persp_{{ $safeSysName }} fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:1px
         object -.-> persp_{{ $safeSysName }}
 
@@ -78,30 +73,25 @@
         {{ $viewID := $page.File.BaseFileName }}
         {{ $viewData := index site.Data.views $viewID }}
 
-        {{ $safeViewName := $page.Title | replaceRE "[^a-zA-Z0-9]" "" }}
-        view["{{ $page.Title }}"]
+        {{ $safeViewName := $viewID | replaceRE "[^a-zA-Z0-9]" "" }}
+        view["{{ $page.Title | htmlEscape }}"]
         style view fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:2px
 
         %% Upstream Attributes (Sample)
         {{ if $viewData.IncludedAttributes }}
         subgraph Data Elements
         direction TB
-        {{ range first 5 $viewData.IncludedAttributes }}
+        {{ range $viewData.IncludedAttributes }}
         {{ $attrName := "" }}
         {{ if reflect.IsMap . }}{{ $attrName = .Name }}{{ else }}{{ $attrName = . }}{{ end }}
         {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ $attrName }}"]
+        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> view
         {{ $attrPage := site.GetPage (printf "/attributes/%s" $attrName) }}
         {{ if $attrPage }}
         click attr_{{ $safeAttrName }} "{{ $attrPage.RelPermalink }}"
         {{ end }}
-        {{ end }}
-        {{ if gt (len $viewData.IncludedAttributes) 5 }}
-        more_attr["...and {{ sub (len $viewData.IncludedAttributes) 5 }} more"]
-        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-        more_attr -.-> view
         {{ end }}
         end
         {{ end }}
@@ -112,7 +102,7 @@
         {{ $roleName := "" }}
         {{ if reflect.IsMap . }}{{ $roleName = .Role | default .userRole }}{{ else }}{{ $roleName = . }}{{ end }}
         {{ $safeRoleName := $roleName | replaceRE "[^a-zA-Z0-9]" "" }}
-        role_{{ $safeRoleName }}("{{ $roleName }}")
+        role_{{ $safeRoleName }}("{{ $roleName | htmlEscape }}")
         style role_{{ $safeRoleName }} fill:#e0f2f1,stroke:#00695c,color:#00695c,stroke-width:1px
         view -.-> role_{{ $safeRoleName }}
         {{ end }}
@@ -125,32 +115,27 @@
         {{ $objectData := index site.Data.objects $objectID }}
         {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
 
-        {{ $safePerspName := $perspectiveID | replaceRE "[()]" "" }}
-        persp["{{ $safePerspName }}"]
+        {{ $safePerspName := $perspectiveID | replaceRE "[^a-zA-Z0-9]" "" }}
+        persp["{{ $perspectiveID | htmlEscape }}"]
         style persp fill:#f3e5f5,stroke:#7b1fa2,color:#7b1fa2,stroke-width:2px
 
         %% Upstream Object
-        {{ $safeObjectName := $objectData.Name | replaceRE "[()]" "" }}
-        object["{{ $safeObjectName }}<br />(Canonical Object)"]
+        {{ $safeObjectName := $objectData.Name | replaceRE "[^a-zA-Z0-9]" "" }}
+        object["{{ $objectData.Name | htmlEscape }}<br />(Canonical Object)"]
         style object fill:#ffebee,stroke:#d32f2f,color:#d32f2f,stroke-width:1px
         object -.-> persp
-        click object "{{ `objects/` | relURL }}{{ $objectID | lower }}"
+        click object "{{ `objects/` | relURL }}{{ $objectID | lower }}/"
 
         %% Extended Attributes (Perspective Specific)
         {{ if $sysData.RelevantAttributes }}
         subgraph Extended Attributes
         direction TB
-        {{ range first 5 $sysData.RelevantAttributes }}
+        {{ range $sysData.RelevantAttributes }}
         {{ $attrName := .Name }}
         {{ $safeAttrName := $attrName | replaceRE "[^a-zA-Z0-9]" "" }}
-        attr_{{ $safeAttrName }}["{{ $attrName }}"]
+        attr_{{ $safeAttrName }}["{{ $attrName | htmlEscape }}"]
         style attr_{{ $safeAttrName }} fill:#fff,stroke:#999,stroke-dasharray: 5 5
         attr_{{ $safeAttrName }} -.-> persp
-        {{ end }}
-        {{ if gt (len $sysData.RelevantAttributes) 5 }}
-        more_attr["...and {{ sub (len $sysData.RelevantAttributes) 5 }} more"]
-        style more_attr fill:#fff,stroke:#999,stroke-dasharray: 5 5
-        more_attr -.-> persp
         {{ end }}
         end
         {{ end }}
@@ -158,12 +143,17 @@
         %% Downstream Views
         {{ if $sysData.ViewsUsed }}
         {{ range $sysData.ViewsUsed }}
-        {{ $viewName := .ref }}
-        {{ $safeViewName := $viewName | replaceRE "[^a-zA-Z0-9]" "" }}
-        view_{{ $safeViewName }}["{{ $viewName }}"]
+        {{ $viewID := .ref }}
+        {{ $safeViewName := $viewID | replaceRE "[^a-zA-Z0-9]" "" }}
+        view_{{ $safeViewName }}["{{ $viewID | htmlEscape }}"]
         style view_{{ $safeViewName }} fill:#e8eaf6,stroke:#303f9f,color:#303f9f,stroke-width:1px
-        persp -.-> view_{{ $safeViewName }}
-        click view_{{ $safeViewName }} "{{ `views/` | relURL }}{{ $viewName }}"
+        view_{{ $safeViewName }} -.-> persp
+        {{ $viewPage := site.GetPage (printf "/views/%s" $viewID) }}
+        {{ if $viewPage }}
+        click view_{{ $safeViewName }} "{{ $viewPage.RelPermalink }}"
+        {{ else }}
+        click view_{{ $safeViewName }} "{{ `views/` | relURL }}{{ $viewID | urlize }}/"
+        {{ end }}
         {{ end }}
         {{ end }}
 
@@ -173,20 +163,20 @@
         {{ $attributeData := index site.Data.attributes $attributeID }}
         {{ $usedIn := .UsedIn }}
 
-        {{ $safeName := $attributeData.name | replaceRE "[()]" "" }}
-        root["{{ $safeName }}"]
+        {{ $safeName := $attributeData.name | replaceRE "[^a-zA-Z0-9]" "" }}
+        root["{{ $attributeData.name | htmlEscape }}"]
         style root fill:#f5f5f5,stroke:#666,stroke-width:2px,color:#333
 
         {{ if $page.Params.sourceSystem }}
-        source[("{{ $page.Params.sourceSystem }}")]
+        source[("{{ $page.Params.sourceSystem | htmlEscape }}")]
         style source fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
         source -.-> root
         {{ end }}
 
         {{ range $index, $item := $usedIn }}
         {{ $itemName := $item.name | default "Unnamed Node" }}
-        {{ $safeItemName := $itemName | replaceRE "[()]" "" }}
-        node{{ $index }}["{{ $safeItemName }}"]
+        {{ $safeItemName := $itemName | replaceRE "[^a-zA-Z0-9]" "" }}
+        node{{ $index }}["{{ $itemName | htmlEscape }}"]
         root -.-> node{{ $index }}
 
         {{ if eq $item.type "Business Object" }}
