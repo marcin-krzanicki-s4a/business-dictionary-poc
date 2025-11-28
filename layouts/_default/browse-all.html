@@ -15,7 +15,7 @@
 
         <!-- Tabs Content -->
         <ul id="browse-switcher" class="uk-switcher uk-margin">
-            
+
             <!-- Tab 1: Browse List -->
             <li>
                 <!-- Filter and Search Bar -->
@@ -71,106 +71,125 @@
 
                     <div>
                         <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                            <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                            <div
+                                class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
                                 <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
-                            <span class="uk-text-small uk-text-uppercase" style="color: #666;">
-                                <span uk-icon="icon: tag; ratio: 0.8" class="uk-margin-small-right"></span>
-                                Global Attribute
-                            </span>
-                        </div>
-                        <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-break">{{ $attributeData.name }}</h3>
-                        <div class="uk-margin-small-top">
-                             <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; background-color: var(--s4a-red);">{{ $status }}</span>
-                        </div>
+                                    <span class="uk-text-small uk-text-uppercase" style="color: #666;">
+                                        <span uk-icon="icon: tag; ratio: 0.8" class="uk-margin-small-right"></span>
+                                        Global Attribute
+                                    </span>
+                                </div>
+                                <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-break">{{
+                                    $attributeData.name }}</h3>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-badge"
+                                        style="font-size: 10px; padding: 2px 8px; background-color: var(--s4a-red);">{{
+                                        $status }}</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            {{ end }}
-            {{ end }}
+                    {{ end }}
+                    {{ end }}
 
-            <!-- Objects -->
-            {{ range where site.RegularPages "Section" "objects" }}
-            {{ $objectID := .File.BaseFileName }}
-            {{ $objectData := index site.Data.objects $objectID }}
-            {{ if $objectData }}
-            {{ $status := $objectData.Status | default "Draft" }}
+                    <!-- Objects -->
+                    {{ range where site.RegularPages "Section" "objects" }}
+                    {{ $objectID := .File.BaseFileName }}
+                    {{ $objectData := index site.Data.objects $objectID }}
+                    {{ if $objectData }}
+                    {{ $status := $objectData.Status | default "Draft" }}
 
-            <div>
-                <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
-                        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
-                            <span class="uk-text-small uk-text-uppercase" style="color: var(--s4a-red);">
-                                <span uk-icon="icon: file-text; ratio: 0.8" class="uk-margin-small-right"></span>
-                                Business Object
-                            </span>
-                        </div>
-                        <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate" uk-tooltip="title: {{ $objectData.Name }}">{{ $objectData.Name }}</h3>
-                        <div class="uk-margin-small-top">
-                            <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{ $status }}</span>
-                        </div>
+                    <div>
+                        <a href="{{ .RelPermalink }}" class="uk-link-reset">
+                            <div
+                                class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                                <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+                                    <span class="uk-text-small uk-text-uppercase" style="color: var(--s4a-red);">
+                                        <span uk-icon="icon: file-text; ratio: 0.8"
+                                            class="uk-margin-small-right"></span>
+                                        Business Object
+                                    </span>
+                                </div>
+                                <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate"
+                                    uk-tooltip="title: {{ $objectData.Name }}">{{ $objectData.Name }}</h3>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-badge"
+                                        style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{
+                                        $status }}</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            {{ end }}
-            {{ end }}
+                    {{ end }}
+                    {{ end }}
 
-            <!-- Perspectives -->
-            {{ range where site.RegularPages "Section" "perspectives" }}
-            {{ $objectID := .Params.object_id }}
-            {{ $perspectiveID := .Params.perspective_id }}
-            {{ $objectData := index site.Data.objects $objectID }}
-            {{ if $objectData }}
-            {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
-            {{ if $sysData }}
-            {{ $status := $sysData.Status | default "Draft" }}
+                    <!-- Perspectives -->
+                    {{ range where site.RegularPages "Section" "perspectives" }}
+                    {{ $objectID := .Params.object_id }}
+                    {{ $perspectiveID := .Params.perspective_id }}
+                    {{ $objectData := index site.Data.objects $objectID }}
+                    {{ if $objectData }}
+                    {{ $sysData := index $objectData.SystemPerspectives $perspectiveID }}
+                    {{ if $sysData }}
+                    {{ $status := $sysData.Status | default "Draft" }}
 
-            <div>
-                <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
-                        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
-                            <span class="uk-text-small uk-text-uppercase" style="color: var(--s4a-light-violet);">
-                                <span uk-icon="icon: album; ratio: 0.8" class="uk-margin-small-right"></span>
-                                System Perspective
-                            </span>
-                        </div>
-                        <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate" uk-tooltip="title: {{ $perspectiveID }}">{{ $perspectiveID }}</h3>
-                        <div class="uk-margin-small-top">
-                            <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{ $status }}</span>
-                        </div>
+                    <div>
+                        <a href="{{ .RelPermalink }}" class="uk-link-reset">
+                            <div
+                                class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                                <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+                                    <span class="uk-text-small uk-text-uppercase"
+                                        style="color: var(--s4a-light-violet);">
+                                        <span uk-icon="icon: album; ratio: 0.8" class="uk-margin-small-right"></span>
+                                        System Perspective
+                                    </span>
+                                </div>
+                                <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate"
+                                    uk-tooltip="title: {{ $perspectiveID }}">{{ $perspectiveID }}</h3>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-badge"
+                                        style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{
+                                        $status }}</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            {{ end }}
-            {{ end }}
-            {{ end }}
+                    {{ end }}
+                    {{ end }}
+                    {{ end }}
 
-            <!-- Views -->
-            {{ range where site.RegularPages "Section" "views" }}
-            {{ $viewID := .File.BaseFileName }}
-            {{ $viewData := index site.Data.views $viewID }}
-            {{ if $viewData }}
-            {{ $status := $viewData.Status | default "Draft" }}
+                    <!-- Views -->
+                    {{ range where site.RegularPages "Section" "views" }}
+                    {{ $viewID := .File.BaseFileName }}
+                    {{ $viewData := index site.Data.views $viewID }}
+                    {{ if $viewData }}
+                    {{ $status := $viewData.Status | default "Draft" }}
 
-            <div>
-                <a href="{{ .RelPermalink }}" class="uk-link-reset">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
-                        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
-                            <span class="uk-text-small uk-text-uppercase" style="color: var(--s4a-dark-violet);">
-                                <span uk-icon="icon: laptop; ratio: 0.8" class="uk-margin-small-right"></span>
-                                UI View
-                            </span>
-                        </div>
-                        <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate" uk-tooltip="title: {{ .Title }}">{{ .Title }}</h3>
-                        <div class="uk-margin-small-top">
-                            <span class="uk-badge" style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{ $status }}</span>
-                        </div>
+                    <div>
+                        <a href="{{ .RelPermalink }}" class="uk-link-reset">
+                            <div
+                                class="uk-card uk-card-default uk-card-hover uk-card-body uk-height-1-1 uk-padding-small">
+                                <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-small-bottom">
+                                    <span class="uk-text-small uk-text-uppercase"
+                                        style="color: var(--s4a-dark-violet);">
+                                        <span uk-icon="icon: laptop; ratio: 0.8" class="uk-margin-small-right"></span>
+                                        UI View
+                                    </span>
+                                </div>
+                                <h3 class="uk-card-title uk-margin-remove-top uk-margin-small-bottom uk-text-truncate"
+                                    uk-tooltip="title: {{ .Title }}">{{ .Title }}</h3>
+                                <div class="uk-margin-small-top">
+                                    <span class="uk-badge"
+                                        style="font-size: 10px; padding: 2px 8px; {{ if eq (lower $status) `draft` }}background-color: var(--s4a-light-violet);{{ else if eq (lower $status) `deprecated` }}background-color: #888;{{ else }}background-color: var(--s4a-red);{{ end }}">{{
+                                        $status }}</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            {{ end }}
-            {{ end }}
+                    {{ end }}
+                    {{ end }}
 
-        </div>
+                </div>
             </li>
 
             <!-- Tab 2: Domain Model Diagram -->
@@ -183,9 +202,9 @@
                         erDiagram
                         {{ range $id, $data := site.Data.objects }}
                         {{ $safeName := $data.Name | default $id | replaceRE "[^a-zA-Z0-9]" "" }}
-                        
+
                         {{ $safeName }} {
-                            string ID "{{ $data.TermID | default $id }}"
+                        string ID "{{ $data.TermID | default $id }}"
                         }
 
                         {{ if $data.CoreRelationships }}
@@ -218,31 +237,65 @@
                     <h2 class="uk-h3" style="color: var(--s4a-light-violet);">Data Lineage</h2>
                     <p class="uk-text-small uk-text-muted">Tracing data flow from Objects to Perspectives and Views.</p>
                     <div class="mermaid-lazy uk-text-center" style="visibility: hidden;">
-                        graph LR
+                        flowchart LR
                         %% Nodes and Styles
                         classDef object fill:#EB0045,color:white,stroke:#333,stroke-width:2px;
                         classDef perspective fill:#31006F,color:white,stroke:#333,stroke-width:2px;
                         classDef view fill:#201747,color:white,stroke:#333,stroke-width:2px;
+                        classDef attribute fill:#fff,stroke:#999,stroke-dasharray: 5 5,color:#333;
 
                         %% Objects
                         {{ range $id, $data := site.Data.objects }}
                         {{ $safeObjName := $data.Name | default $id | replaceRE "[^a-zA-Z0-9]" "" }}
-                        {{ $safeObjName }}["{{ $data.Name }}"]:::object
+                        {{ $safeObjName }}["(Business Object)<br />{{ $data.Name }}"]:::object
+                        {{ with site.GetPage (printf "/objects/%s" $id) }}
+                        click {{ $safeObjName }} "{{ .RelPermalink }}" "Go to {{ $data.Name }}"
+                        {{ end }}
+
+                        %% Attributes linked to this Object
+                        {{ if $data.CoreAttributes }}
+                        {{ range $data.CoreAttributes }}
+                        {{ $safeAttrName := printf "%s_attr_%s" $safeObjName (.Name | replaceRE "[^a-zA-Z0-9]" "") }}
+                        {{ $safeAttrName }}["(Attribute)<br />{{ .Name }}"]:::attribute
+                        {{ $safeAttrName }} -.-> {{ $safeObjName }}
+                        {{ with site.GetPage (printf "/objects/%s" $id) }}
+                        click {{ $safeAttrName }} "{{ .RelPermalink }}#{{ .Name | urlize }}" "Go to {{ .Name }}"
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
 
                         %% Perspectives linked to this Object
                         {{ if $data.SystemPerspectives }}
                         {{ range $pName, $pData := $data.SystemPerspectives }}
                         {{ $safePName := printf "%s_%s" $safeObjName ($pName | replaceRE "[^a-zA-Z0-9]" "") }}
-                        {{ $safePName }}["{{ $pName }}"]:::perspective
+                        {{ $safePName }}["(Perspective)<br />{{ $pName }}"]:::perspective
                         {{ $safeObjName }} --> {{ $safePName }}
+                        {{ with site.GetPage (printf "/perspectives/%s-%s" ($id | lower) ($pName | urlize)) }}
+                        click {{ $safePName }} "{{ .RelPermalink }}" "Go to {{ $pName }}"
+                        {{ end }}
+
+                        %% Attributes linked to this Perspective
+                        {{ if $pData.RelevantAttributes }}
+                        {{ range $pData.RelevantAttributes }}
+                        {{ $safePAttrName := printf "%s_attr_%s" $safePName (.Name | replaceRE "[^a-zA-Z0-9]" "") }}
+                        {{ $safePAttrName }}["(Attribute)<br />{{ .Name }}"]:::attribute
+                        {{ $safePAttrName }} -.-> {{ $safePName }}
+                        {{ with site.GetPage (printf "/objects/%s" $id) }}
+                        click {{ $safePAttrName }} "{{ .RelPermalink }}#{{ .Name | urlize }}" "Go to {{ .Name }}"
+                        {{ end }}
+                        {{ end }}
+                        {{ end }}
 
                         %% Views linked to this Perspective
                         {{ if $pData.ViewsUsed }}
                         {{ range $pData.ViewsUsed }}
                         {{ $viewRef := .ref }}
                         {{ $safeViewName := $viewRef | replaceRE "[^a-zA-Z0-9]" "" }}
-                        {{ $safeViewName }}["{{ $viewRef }}"]:::view
+                        {{ $safeViewName }}["(UI View)<br />{{ $viewRef }}"]:::view
                         {{ $safePName }} --> {{ $safeViewName }}
+                        {{ with site.GetPage (printf "/views/%s" $viewRef) }}
+                        click {{ $safeViewName }} "{{ .RelPermalink }}" "Go to {{ $viewRef }}"
+                        {{ end }}
                         {{ end }}
                         {{ end }}
 
@@ -257,28 +310,188 @@
     </div>
 </div>
 
+<style>
+    /* Dimming effect for interactive mermaid diagrams */
+    .mermaid-dimmed .node,
+    .mermaid-dimmed .edgePath,
+    .mermaid-dimmed .flowchart-link,
+    .mermaid-dimmed .edgePaths path,
+    .mermaid-dimmed .cluster {
+        opacity: 0.1 !important;
+        transition: opacity 0.2s;
+    }
+
+    /* Active (highlighted) elements */
+    .mermaid-dimmed .node.mermaid-active,
+    .mermaid-dimmed .edgePath.mermaid-active,
+    .mermaid-dimmed .flowchart-link.mermaid-active,
+    .mermaid-dimmed .edgePaths path.mermaid-active,
+    .mermaid-dimmed .cluster.mermaid-active {
+        opacity: 1 !important;
+    }
+
+    /* Ensure text in active nodes is visible */
+    .mermaid-dimmed .node.mermaid-active text {
+        fill: black !important;
+    }
+
+    /* Make active edges pop */
+    .mermaid-dimmed .edgePath.mermaid-active path,
+    .mermaid-dimmed .flowchart-link.mermaid-active path,
+    .mermaid-dimmed path.mermaid-active {
+        stroke-width: 3px !important;
+        stroke: var(--s4a-dark-violet) !important;
+        opacity: 1 !important;
+    }
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         UIkit.util.on('#browse-switcher', 'shown', function (event) {
             var activeTab = event.target;
             // Look for the lazy-loaded mermaid container in the active tab
             var lazyMermaid = activeTab.querySelector('.mermaid-lazy');
-            
+
             if (lazyMermaid) {
-                // 1. Reveal the container (it is now inside a visible tab)
+                // 1. Reveal the container
                 lazyMermaid.style.visibility = 'visible';
                 lazyMermaid.classList.remove('mermaid-lazy');
                 lazyMermaid.classList.add('mermaid');
-                
-                // 2. Initialize Mermaid explicitly on this element
+
+                // Capture the graph definition BEFORE Mermaid consumes it
+                var graphDefinition = lazyMermaid.textContent;
+
+                // 2. Initialize Mermaid
                 try {
-                    mermaid.init(undefined, lazyMermaid);
+                    mermaid.init(undefined, lazyMermaid).then(() => {
+                        // 3. Setup interactive hover effects after rendering
+                        setupMermaidInteractivity(lazyMermaid, graphDefinition);
+                    });
                 } catch (e) {
                     console.error("Mermaid rendering failed:", e);
                     lazyMermaid.innerHTML = '<div class="uk-alert uk-alert-danger">Error rendering diagram. Please refresh the page.</div>';
                 }
             }
         });
+
+        function setupMermaidInteractivity(container, graphDef) {
+            // Parse graph to build adjacency list
+            var adjacency = {};
+            // Regex to find connections like A --> B or A -.-> B
+            // Matches: NodeA ...arrow... NodeB
+            var regex = /([a-zA-Z0-9_]+)\s*[-.=]+>\s*([a-zA-Z0-9_]+)/g;
+            var match;
+
+            while ((match = regex.exec(graphDef)) !== null) {
+                var source = match[1];
+                var target = match[2];
+
+                if (!adjacency[source]) adjacency[source] = [];
+                if (!adjacency[target]) adjacency[target] = [];
+
+                // Add bidirectional connection for "related" highlighting
+                if (!adjacency[source].includes(target)) adjacency[source].push(target);
+                if (!adjacency[target].includes(source)) adjacency[target].push(source);
+            }
+
+            // Attach event listeners to nodes
+            var nodes = container.querySelectorAll('.node');
+            nodes.forEach(function (node) {
+                var matchedKey = null;
+                var nodeId = node.id.toLowerCase(); // Use lowercase for matching
+
+                Object.keys(adjacency).forEach(function (key) {
+                    var keyLower = key.toLowerCase();
+                    // Robust check for ID match (case-insensitive)
+                    // We check if the lowercased DOM ID contains the lowercased key as a distinct part
+                    if (nodeId.indexOf(keyLower) !== -1) {
+                        // Simple check might be enough if keys are unique enough
+                        // But let's try to be safe: check if it's surrounded by non-alphanumeric or start/end
+                        // Note: Mermaid IDs are like "flowchart-flight-25", so "flight" is surrounded by "-"
+                        var keyRegex = new RegExp(`[^a-z0-9_]${keyLower}[^a-z0-9_]|${keyLower}[^a-z0-9_]|[^a-z0-9_]${keyLower}$|^${keyLower}$`);
+                        if (keyRegex.test(nodeId)) {
+                            matchedKey = key;
+                        }
+                    }
+                });
+
+                if (matchedKey) {
+                    node.addEventListener('mouseenter', function () {
+                        container.classList.add('mermaid-dimmed');
+
+                        // Highlight current node
+                        this.classList.add('mermaid-active');
+
+                        // Highlight neighbors and edges
+                        var neighbors = adjacency[matchedKey];
+                        neighbors.forEach(function (neighborKey) {
+                            var neighborKeyLower = neighborKey.toLowerCase();
+
+                            // 1. Highlight Neighbor Nodes
+                            var neighborKeyRegex = new RegExp(`[^a-z0-9_]${neighborKeyLower}[^a-z0-9_]|${neighborKeyLower}[^a-z0-9_]|[^a-z0-9_]${neighborKeyLower}$|^${neighborKeyLower}$`);
+
+                            container.querySelectorAll('.node').forEach(n => {
+                                if (neighborKeyRegex.test(n.id.toLowerCase())) {
+                                    n.classList.add('mermaid-active');
+                                }
+                            });
+
+                            // 2. Highlight Connecting Edges
+                            // Try multiple selectors as Mermaid versions differ
+                            var edges = container.querySelectorAll('.edgePath, .flowchart-link, .edgePaths path');
+
+                            edges.forEach(edge => {
+                                var edgeId = edge.id.toLowerCase();
+                                var matchedKeyLower = matchedKey.toLowerCase();
+
+                                // Skip if no ID (some paths might be markers)
+                                if (!edgeId) return;
+
+                                // Check if edge contains both keys
+                                var hasMatched = edgeId.indexOf(matchedKeyLower) !== -1;
+                                var hasNeighbor = edgeId.indexOf(neighborKeyLower) !== -1;
+
+                                if (hasMatched && hasNeighbor) {
+                                    // Robust check for substring collisions
+                                    // e.g. matched=AIRLINE, neighbor=AIRLINE_RouteManagement
+                                    // AIRLINE is inside AIRLINE_RouteManagement.
+                                    // We must ensure AIRLINE exists *outside* of AIRLINE_RouteManagement in the edge ID.
+
+                                    var isValid = true;
+
+                                    if (neighborKeyLower.indexOf(matchedKeyLower) !== -1) {
+                                        // matchedKey is a substring of neighborKey
+                                        // Remove all instances of neighborKey and check if matchedKey still exists
+                                        var tempId = edgeId.split(neighborKeyLower).join('');
+                                        if (tempId.indexOf(matchedKeyLower) === -1) {
+                                            isValid = false;
+                                        }
+                                    } else if (matchedKeyLower.indexOf(neighborKeyLower) !== -1) {
+                                        // neighborKey is a substring of matchedKey
+                                        // Remove all instances of matchedKey and check if neighborKey still exists
+                                        var tempId = edgeId.split(matchedKeyLower).join('');
+                                        if (tempId.indexOf(neighborKeyLower) === -1) {
+                                            isValid = false;
+                                        }
+                                    }
+
+                                    if (isValid) {
+                                        edge.classList.add('mermaid-active');
+                                    }
+                                }
+                            });
+                        });
+                    });
+
+                    node.addEventListener('mouseleave', function () {
+                        container.classList.remove('mermaid-dimmed');
+                        container.querySelectorAll('.mermaid-active').forEach(function (el) {
+                            el.classList.remove('mermaid-active');
+                        });
+                    });
+                }
+            });
+        }
     });
 </script>
 

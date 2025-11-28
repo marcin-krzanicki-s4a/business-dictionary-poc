@@ -42,6 +42,114 @@ body {
     color: var(--s4a-red) !important;
 }
 
+/* Navbar Dropdown Styling */
+.uk-navbar-dropdown {
+    background-color: var(--s4a-dark-violet) !important;
+    color: white !important;
+}
+
+.uk-navbar-dropdown-nav>li>a {
+    color: white !important;
+}
+
+.uk-navbar-dropdown-nav>li>a:hover {
+    color: var(--s4a-red) !important;
+}
+
+.uk-navbar-dropdown-nav>li.uk-active>a {
+    color: var(--s4a-red) !important;
+}
+
+/* Mobile Offcanvas Menu Styling */
+.uk-offcanvas-bar {
+    background-color: var(--s4a-dark-violet) !important;
+}
+
+.uk-offcanvas-bar .uk-nav-primary>li>a {
+    color: white !important;
+}
+
+.uk-offcanvas-bar .uk-nav-primary>li>a:hover,
+.uk-offcanvas-bar .uk-nav-primary>li.uk-active>a {
+    color: var(--s4a-red) !important;
+}
+
+.uk-offcanvas-bar .uk-nav-sub>li>a {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.uk-offcanvas-bar .uk-nav-sub>li>a:hover,
+.uk-offcanvas-bar .uk-nav-sub>li.uk-active>a {
+    color: var(--s4a-red) !important;
+}
+
+.uk-offcanvas-close {
+    color: white !important;
+}
+
+/* Mermaid Diagram Fixes */
+/* Force transparent background for all subgraphs/clusters */
+.mermaid .cluster rect {
+    fill: none !important;
+    stroke: #999 !important;
+    stroke-dasharray: 5 5 !important;
+}
+
+/* Alternative selector for different Mermaid versions */
+.mermaid g.cluster rect {
+    fill: none !important;
+    stroke: #999 !important;
+    stroke-dasharray: 5 5 !important;
+}
+
+/* Search icon in navbar */
+.uk-navbar-toggle[uk-search-icon] {
+    color: white !important;
+}
+
+/* Search drop styling */
+.uk-drop-navbar {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+.uk-drop-navbar .uk-search-navbar {
+    background: transparent !important;
+}
+
+.uk-drop-navbar .uk-search-navbar .uk-search-input {
+    min-width: 300px;
+    background: var(--s4a-dark-violet) !important;
+    color: white !important;
+    border: 1px solid white !important;
+    border-radius: 4px !important;
+    padding: 0 10px !important;
+    height: 35px !important;
+    font-family: var(--uk-global-font-family);
+    font-size: 0.875rem !important;
+    /* Matches standard UIkit navbar font size */
+    text-transform: uppercase !important;
+    /* Matches standard UIkit navbar font style */
+    letter-spacing: 1px;
+}
+
+.uk-drop-navbar .uk-search-navbar .uk-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.uk-drop-navbar .uk-search-navbar .uk-search-input:focus {
+    border-color: var(--s4a-red) !important;
+    outline: none !important;
+}
+
+#navbar-search-results {
+    background: white !important;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
 /* Typography & Colors */
 .uk-text-primary-red {
     color: var(--s4a-red) !important;
@@ -405,7 +513,7 @@ body {
 }
 
 /* Custom Tab Styling */
-.uk-tab > * > a {
+.uk-tab>*>a {
     color: var(--s4a-light-violet);
     font-weight: 500;
     font-size: 1.1rem;
@@ -413,12 +521,12 @@ body {
     text-transform: none;
 }
 
-.uk-tab > .uk-active > a {
+.uk-tab>.uk-active>a {
     color: var(--s4a-dark-violet) !important;
     border-color: var(--s4a-red) !important;
     font-weight: 700;
 }
 
-.uk-tab > * > a:hover {
+.uk-tab>*>a:hover {
     color: var(--s4a-red);
 }

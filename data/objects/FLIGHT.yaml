@@ -30,6 +30,9 @@ CoreAttributes:
     Values: [Scheduled, Active, Landed, Cancelled, Diverted]
     Source: Ops System
     APICall: GET /flights/{id}/status
+  - Name: Timezone
+    Type: String
+    Source: IANA Timezone DB
 
 CoreRelationships:
   - type: has-one

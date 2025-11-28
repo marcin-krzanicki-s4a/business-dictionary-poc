@@ -40,11 +40,65 @@
                     </a>
                 </div>
                 <div class="uk-navbar-right">
-                    <ul class="uk-navbar-nav">
+                    <!-- Desktop Menu -->
+                    <ul class="uk-navbar-nav uk-visible@m">
                         <li class="{{ if .IsHome }}uk-active{{ end }}"><a href="{{ site.Home.RelPermalink }}">Home</a>
                         </li>
+                        <li
+                            class="{{ if or (eq .Section `browse`) (eq .Section `attributes`) (eq .Section `objects`) (eq .Section `perspectives`) (eq .Section `views`) }}uk-active{{ end }}">
+                            <a href="#">Browse <span uk-icon="icon: triangle-down; ratio: 0.7"></span></a>
+                            <div class="uk-navbar-dropdown">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    <li class="{{ if eq .Section `browse` }}uk-active{{ end }}"><a
+                                            href="{{ `browse` | relURL }}">All</a></li>
+                                    <li class="{{ if eq .Section `attributes` }}uk-active{{ end }}"><a
+                                            href="{{ `attributes` | relURL }}">Attributes</a></li>
+                                    <li class="{{ if eq .Section `objects` }}uk-active{{ end }}"><a
+                                            href="{{ `objects` | relURL }}">Objects</a></li>
+                                    <li class="{{ if eq .Section `perspectives` }}uk-active{{ end }}"><a
+                                            href="{{ `perspectives` | relURL }}">Perspectives</a></li>
+                                    <li class="{{ if eq .Section `views` }}uk-active{{ end }}"><a
+                                            href="{{ `views` | relURL }}">Views</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- Search Icon with Drop (Desktop, non-home pages only) -->
+                    {{ if not .IsHome }}
+                    <div class="uk-navbar-item uk-visible@m">
+                        <a class="uk-navbar-toggle" href uk-search-icon></a>
+                        <div class="uk-drop uk-drop-navbar" uk-drop="mode: click; pos: left-center; offset: 0">
+                            <form class="uk-search uk-search-navbar">
+                                <input id="navbar-search-input" class="uk-search-input" type="search"
+                                    placeholder="Search..." autocomplete="off" autofocus>
+                            </form>
+                            <div id="navbar-search-results"
+                                style="display: none; margin-top: 10px; max-height: 400px; overflow-y: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+
+                    <!-- Mobile Menu Toggle -->
+                    <a class="uk-navbar-toggle uk-hidden@m" uk-navbar-toggle-icon href="#offcanvas-nav" uk-toggle></a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Mobile Offcanvas Menu -->
+    <div id="offcanvas-nav" uk-offcanvas="overlay: true">
+        <div class="uk-offcanvas-bar uk-offcanvas-bar-dark">
+            <button class="uk-offcanvas-close" type="button" uk-close></button>
+            <ul class="uk-nav uk-nav-primary uk-nav-parent-icon uk-margin-top" uk-nav>
+                <li class="{{ if .IsHome }}uk-active{{ end }}"><a href="{{ site.Home.RelPermalink }}">Home</a></li>
+                <li
+                    class="uk-parent uk-open {{ if or (eq .Section `browse`) (eq .Section `attributes`) (eq .Section `objects`) (eq .Section `perspectives`) (eq .Section `views`) }}uk-active{{ end }}">
+                    <a href="#">Browse</a>
+                    <ul class="uk-nav-sub">
                         <li class="{{ if eq .Section `browse` }}uk-active{{ end }}"><a
-                                href="{{ `browse` | relURL }}">Browse All</a></li>
+                                href="{{ `browse` | relURL }}">All</a></li>
                         <li class="{{ if eq .Section `attributes` }}uk-active{{ end }}"><a
                                 href="{{ `attributes` | relURL }}">Attributes</a></li>
                         <li class="{{ if eq .Section `objects` }}uk-active{{ end }}"><a
@@ -54,8 +108,8 @@
                         <li class="{{ if eq .Section `views` }}uk-active{{ end }}"><a
                                 href="{{ `views` | relURL }}">Views</a></li>
                     </ul>
-                </div>
-            </nav>
+                </li>
+            </ul>
         </div>
     </div>
 
